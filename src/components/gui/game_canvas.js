@@ -1,4 +1,5 @@
 import { Schema } from '../schema.js';
+import styles from './game_canvas.css';
 
 export class GameCanvas extends Schema {
 
@@ -8,17 +9,16 @@ export class GameCanvas extends Schema {
 
   template() {
     return `
-      <div class="tag">
+      <main class="">
         ${this.attributes.text.value}
-      </div>
+      </main>
     `;
   }
 
   templateCss() {
     return `
       <style>
-        [...]
-        [...]
+        ${styles.toString()}
       </style>
     `;
   }

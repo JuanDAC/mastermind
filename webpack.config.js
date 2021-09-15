@@ -17,29 +17,8 @@ module.exports = {
             },
             {
                 test: /\.css$/,
-                use: [
-                    {
-                      // Adds CSS to the DOM by injecting a `<style>` tag
-                      loader: 'style-loader'
-                    },
-                    {
-                      // Interprets `@import` and `url()` like `import/require()` and will resolve them
-                      loader: 'css-loader'
-                    },
-                    {
-                      // Loader for webpack to process CSS with PostCSS
-                      loader: 'postcss-loader',
-                      options: {
-                        postcssOptions: {
-                          plugins: [
-                                  'autoprefixer',
-                                  'postcss-calc',
-                                  'postcss-cssnext'
-                              ]
-                        }
-                      }
-                    },
-                  ]
+                exclude: /node_modules/,
+                use: ['css-loader']
             },
             {
                 test: /\.html$/,
@@ -65,9 +44,5 @@ module.exports = {
             filename: "./index.html",
             inject: false
         }),
-        new MiniCssExtractPlugin({
-            filename: "[name].css",
-            chunkFilename: "[id].css"
-        })
     ]
 }
