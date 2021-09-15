@@ -1,3 +1,12 @@
+* {
+  margin: unset;
+  padding: unset;
+}
+
+body {
+  min-height: 100vh;
+} 
+
 :root {
 	--color-primary-background: #350147;
 } 

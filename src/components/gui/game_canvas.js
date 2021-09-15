@@ -4,12 +4,12 @@ import styles from './game_canvas.css';
 export class GameCanvas extends Schema {
 
   initComponent() {
-    this.$text = this.shadowDOM.querySelector('.tag');
+    this.$canvas = this.shadowDOM.querySelector('.canvas');
   }
 
   template() {
     return `
-      <main class="">
+      <main class="canvas">
         ${this.attributes.text.value}
       </main>
     `;
@@ -30,6 +30,16 @@ export class GameCanvas extends Schema {
     attributesMapping.forEach(key => {
       if (!this.attributes[key]) {
         this.attributes[key] = {value: ''};
+      }
+    });
+  }
+
+  addEvents() {
+    this.guiStore.register(({actionType, innerHeight, innerWidth}) => {
+      if (actionType === 'window-resize') {
+        this.windowHeight = innerHeight;
+        this.windowWidth = innerWidth;
+        this.style.setProperty('--game-canvas--height', `${this.windowHeight}px`);
       }
     });
   }

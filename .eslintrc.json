@@ -24,20 +24,6 @@
         "semi": [
             "error",
             "always"
-        ],
-        "no-alert": [
-            "error",
-            "always"
-        ],
-        "no-debugger": [
-            "error",
-            "always"
-        ],
-		"no-console": [
-			"error",
-			{
-				"allow": ["warn", "error"]
-			}
-		]
+        ]
     }
 }
