@@ -3,7 +3,9 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = {
-    entry: ["@babel/polyfill",  "./src/js/main.js"],
+    entry: {
+      app: ["@babel/polyfill",  "./src/app.js"],
+    },
     module: {
         rules: [
             {
@@ -30,15 +32,9 @@ module.exports = {
                       options: {
                         postcssOptions: {
                           plugins: [
-                                [
-                                  ('autoprefixer'),
-                                ],
-                                [
-                                  ('postcss-calc'),
-                                ],
-                                [
-                                  ('postcss-cssnext')
-                                ],
+                                  'autoprefixer',
+                                  'postcss-calc',
+                                  'postcss-cssnext'
                               ]
                         }
                       }
@@ -66,7 +62,8 @@ module.exports = {
         new CleanWebpackPlugin(),
         new HtmlWebPackPlugin({
             template: "./src/index.html",
-            filename: "./index.html"
+            filename: "./index.html",
+            inject: false
         }),
         new MiniCssExtractPlugin({
             filename: "[name].css",
