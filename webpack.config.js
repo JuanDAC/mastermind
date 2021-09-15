@@ -11,13 +11,10 @@ module.exports = {
                 exclude: /node_modules/,
                 use: {
                     loader: "babel-loader",
-                    query: {
-                      presets: ["esnext", "stage-0", "stage-1", "stage-2"]
-                    }
                 }
             },
             {
-                test: /\.scss$/,
+                test: /\.css$/,
                 use: [
                     {
                       // Adds CSS to the DOM by injecting a `<style>` tag
@@ -31,19 +28,21 @@ module.exports = {
                       // Loader for webpack to process CSS with PostCSS
                       loader: 'postcss-loader',
                       options: {
-                        plugins: function () {
-                          return [
-                            require('autoprefixer'),
-                            require('postcss-calc'),
-                            require('postcss-cssnext')
-                          ];
+                        postcssOptions: {
+                          plugins: [
+                                [
+                                  ('autoprefixer'),
+                                ],
+                                [
+                                  ('postcss-calc'),
+                                ],
+                                [
+                                  ('postcss-cssnext')
+                                ],
+                              ]
                         }
                       }
                     },
-                    {
-                      // Loads a SASS/SCSS file and compiles it to CSS
-                      loader: 'sass-loader'
-                    }
                   ]
             },
             {
