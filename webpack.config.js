@@ -11,6 +11,9 @@ module.exports = {
                 exclude: /node_modules/,
                 use: {
                     loader: "babel-loader"
+                    query: {
+                      presets: ["es2015", "stage-0", "stage-1", "stage-2"],
+                    }
                 }
             },
             {
@@ -30,7 +33,9 @@ module.exports = {
                       options: {
                         plugins: function () {
                           return [
-                            require('autoprefixer')
+                            require('autoprefixer'),
+                            require('postcss-calc'),
+                            require('postcss-cssnext')
                           ];
                         }
                       }
