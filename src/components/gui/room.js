@@ -1,13 +1,11 @@
 import { Schema } from '../schema.js';
 import styles from './game_canvas.css';
 
-export class GameCanvas extends Schema {
+export class Room extends Schema {
 
   initComponent() {
     this.$canvas = this.shadowDOM.querySelector('main[canvas]');
     this.$rooms = this.shadowDOM.querySelectorAll('slot[room]');
-    console.log('GameCanvas');
-    console.log(this);
   }
 
   template() {
@@ -37,11 +35,11 @@ export class GameCanvas extends Schema {
     ];
   }
 
-  actionWindowResize() {
-    return ['guiStore', ({actionType, innerHeight}) => {
+  addEvents() {
+    this.guiStore.register(({actionType, innerHeight}) => {
       if (actionType === 'window-resize') {
         this.style.setProperty('--game-canvas--height', `${innerHeight}px`);
       }
-    }];
+    });
   }
 }

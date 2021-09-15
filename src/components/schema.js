@@ -14,10 +14,10 @@ export class Schema extends HTMLElement {
   }
 
   connectedCallback() {
-    this.mapComponentAttributes();
+    this.setMapComponentAttributes();
     this.render();
     this.initComponent();
-    this.addEvents();
+    this.registerActionsToStore();
   }
 
   render() {
@@ -25,6 +25,25 @@ export class Schema extends HTMLElement {
       ${this.templateCss()}
       ${this.template()}
     `;
+  }
+
+  setMapComponentAttributes() {
+    (this.mapComponentAttributes() || []).forEach(({ key, value }) => {
+      if (this.getAttribute(key) === null) {
+        this.setAttribute(String(key), String(value));
+      }
+    });
+  }
+
+  registerActionsToStore() {
+    const methods = [this, Object.getPrototypeOf, Object.getOwnPropertyNames]
+      .reduce((value, funct) => funct(value));
+    for (const method of methods) {
+      if (method.startsWith('action')) {
+        const [store, action] = this[method]();
+        this[store].register(action);
+      }
+    }
   }
 
   mapComponentAttributes() {}
