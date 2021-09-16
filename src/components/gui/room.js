@@ -1,23 +1,15 @@
 import { Schema } from '../schema.js';
-import styles from './game_canvas.css';
+import styles from './room_load.css';
 
-export class Room extends Schema {
+export class RoomLoad extends Schema {
 
   initComponent() {
-    this.$canvas = this.shadowDOM.querySelector('main[canvas]');
-    this.$rooms = this.shadowDOM.querySelectorAll('slot[room]');
+    this.$section = this.shadowDOM.querySelectorAll('section[room]');
   }
 
   template() {
-    const roomsIterator = ['rooms', this.getAttribute.bind(this), parseInt, Array]
-      .reduce((value, funct) => funct(value)).fill();
-
-    const slots = roomsIterator.map((_, number) => `<slot room name="room-${number + 1}"></slot>`).join('');
-
     return `
-      <main canvas>
-        ${slots}
-      </main>
+      <div class="spinner"></div>
     `;
   }
 
@@ -31,14 +23,14 @@ export class Room extends Schema {
 
   mapComponentAttributes() {
     return [
-      {key: 'rooms', value: 0},
+      {key: 'colors', value: 0},
     ];
   }
 
   addEvents() {
-    this.guiStore.register(({actionType, innerHeight}) => {
+    this.guiStore.register(({actionType, innerHeight, innerWidth}) => {
       if (actionType === 'window-resize') {
-        this.style.setProperty('--game-canvas--height', `${innerHeight}px`);
+        this.style.setProperty('--room-load_spinner--size', `${Math.min(innerHeight / 5, innerWidth / 5)}px`);
       }
     });
   }

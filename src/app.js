@@ -12,6 +12,7 @@ window.onresize = () => {
 window.onload = () => {
   const { innerHeight, innerWidth } = window;
   guiStore.dispatch({ innerHeight, innerWidth, actionType: 'window-resize' });
+  guiStore.reload();
 };
 
 const globalStyles =  document.createElement('style');

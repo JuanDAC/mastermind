@@ -1,4 +1,4 @@
-import { guiStore, gameState } from '../store.js';
+import { gameStateStore, guiStore, gameAssetsStore } from '../store.js';
 
 export class Schema extends HTMLElement {
 
@@ -6,7 +6,8 @@ export class Schema extends HTMLElement {
     super();
     this.shadowDOM = this.attachShadow({mode: 'open'});
     this.guiStore = guiStore;
-    this.gameState = gameState;
+    this.gameStateStore = gameStateStore;
+    this.gameAssetsStore = gameAssetsStore;
   }
 
   disconnectedCallback() {
@@ -37,7 +38,8 @@ export class Schema extends HTMLElement {
 
   registerActionsToStore() {
     const methods = [this, Object.getPrototypeOf, Object.getOwnPropertyNames]
-      .reduce((value, funct) => funct(value));
+      .reduce((value, funct) => funct(value)) || [];
+
     for (const method of methods) {
       if (method.startsWith('action')) {
         const [store, action] = this[method]();

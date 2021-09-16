@@ -21,17 +21,20 @@ export class Store {
         .reduce((value, funct) => funct(value)) || {};
       payloads[payload.actionType] = payload;
       localStorage.setItem(this.nameStore, JSON.stringify(payloads));
-    } 
+    }
     this.registered.forEach(({id, callback}) => callback(payload, id));
   }
 
   reload() {
     const payloads = [this.nameStore, localStorage.getItem, JSON.parse, Object.values]
       .reduce((value, funct) => funct(value)) || [];
-    console.log(payloads)
+    console.log(payloads);
     payloads.forEach((payload) => this.dispatch(payload));
   }
 }
 
 export const guiStore = new Store('guiStore');
-export const gameState = new Store('gameState');
+export const gameStateStore = new Store('gameStateStore');
+export const gameAssetsStore = new Store('gameAssetsStore');
+
+
