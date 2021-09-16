@@ -28,10 +28,10 @@ export class Room extends Schema {
       `;
     case 'game':
       return `
-      <div class="cell colors" id="colors" ></div>
-      <div class="cell interaction" id="insert" ></div>
-      <div class="cell chekc" id="check" ></div>
-      <div class="cell hits" id="hit" ></div>
+        <game-selector-colors></game-selector-colors>
+        <div class="cell interaction" id="insert" ></div>
+        <div class="cell chekc" id="check" ></div>
+        <div class="cell hits" id="hit" ></div>
       `;
     default:
       return `

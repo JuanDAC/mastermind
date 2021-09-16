@@ -13,10 +13,7 @@
   grid-template-rows: repeat(6, 1fr);
   gap: 1em;
 }
-:host([type="game"]) > *:not(style),
-:host([type="game"]) > *:not(style):before,
-:host([type="game"]) > *:not(style):after {
-  content: "";
+:host([type="game"]) > *:not(style) {
   box-shadow: inset 0px 0px 0px 1px black;
   display: flex;
   justify-content: center;
@@ -35,22 +32,22 @@
   transition: 500ms;
   backdrop-filter: bur(15px);
 }
-:host([type="game"]) > *:nth-of-type(1) {
+:host([type="game"]) > *:nth-child(2) {
   grid-column: 2 / 3;
   grid-row: 2 / 5;
   border-radius: 1em 0em 0em 0em;
 }
-:host([type="game"]) > *:nth-of-type(2) {
+:host([type="game"]) > *:nth-child(3) {
   grid-column: 2 / 3;
   grid-row: 5 / 6;
   border-radius: 0em 0em 0em 1em;
 }
-:host([type="game"]) > *:nth-of-type(3) {
+:host([type="game"]) > *:nth-child(4) {
   grid-column: 3 / 6;
   grid-row: 2 / 5;
   border-radius: 0em 1em 0em 0em;
 }
-:host([type="game"]) > *:nth-of-type(4) {
+:host([type="game"]) > *:nth-child(5) {
   grid-column: 3 / 6;
   grid-row: 5 / 6;
   border-radius: 0em 0em 1em 0em;
