@@ -1,16 +1,43 @@
 import { Schema } from '../schema.js';
-import styles from './room_load.css';
+import styles from './room.css';
 
-export class RoomLoad extends Schema {
+export class Room extends Schema {
 
   initComponent() {
     this.$section = this.shadowDOM.querySelectorAll('section[room]');
   }
 
   template() {
-    return `
-      <div class="spinner"></div>
-    `;
+    this.typeRoom = this.getAttribute('type');
+    switch (this.typeRoom) {
+    case 'load':
+      return `
+        <div class="spinner"></div>
+      `;
+    case 'home':
+      return `
+        <slot></slot>
+      `;
+    case 'selector-avatar':
+      return `
+        <slot></slot>
+      `;
+    case 'map':
+      return `
+        <slot></slot>
+      `;
+    case 'game':
+      return `
+      <div class="cell colors" id="colors" ></div>
+      <div class="cell interaction" id="insert" ></div>
+      <div class="cell chekc" id="check" ></div>
+      <div class="cell hits" id="hit" ></div>
+      `;
+    default:
+      return `
+        <h1>Attribute ${this.typeRoom} not exist<h1>
+      `;
+    }
   }
 
   templateCss() {
@@ -23,15 +50,17 @@ export class RoomLoad extends Schema {
 
   mapComponentAttributes() {
     return [
-      {key: 'colors', value: 0},
+      { key: 'type', value: 'load' },
+      { key: 'float-botoms', value: true },
     ];
   }
 
-  addEvents() {
-    this.guiStore.register(({actionType, innerHeight, innerWidth}) => {
+  actionWindowsResize () {
+    return ['guiStore', ({actionType, innerHeight, innerWidth}) => {
       if (actionType === 'window-resize') {
-        this.style.setProperty('--room-load_spinner--size', `${Math.min(innerHeight / 5, innerWidth / 5)}px`);
+        this.style.setProperty('--room--height', `${innerHeight}px`);
+        this.style.setProperty('--room--width', `${innerWidth}px`);
       }
-    });
+    }];
   }
 }

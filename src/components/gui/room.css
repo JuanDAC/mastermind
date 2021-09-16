@@ -1,0 +1,14 @@
+
+.spinner {
+  background-color: var(--color-primary-background-rouse);
+  width: var(--room-load_spinner--size);
+  height: var(--room-load_spinner--size);
+}
+:host([type="game"]) {
+  display: grid;
+  width: var(--room--width);
+  height: var(--room--height);
+  grid-template-columns: repeat(6, 1fr);
+  grid-template-rows: repeat(6, 1fr);
+  gap: 0.3em;
+}
