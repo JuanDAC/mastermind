@@ -22,6 +22,7 @@
 
 .wrapper-select-color {
   position: relative;
+  cursor: pointer;
 }
 .select-color {
   position: absolute;

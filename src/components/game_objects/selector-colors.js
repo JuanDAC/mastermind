@@ -1,7 +1,6 @@
 import { Schema } from '../schema.js';
-import html2canvas from 'html2canvas';
 import styles from './selector-colors.css';
-import { toPng, toJpeg, toBlob, toPixelData, toSvg } from 'html-to-image';
+import { toPng } from 'html-to-image';
 
 export class SelectorColors extends Schema {
 
@@ -68,9 +67,9 @@ export class SelectorColors extends Schema {
     return ['guiStore', ({actionType}) => {
       if (actionType === 'check-code') {
         if (this.$code) {
+          const { width } = this.$code.getBoundingClientRect();
           toPng(this.$code).then(imageCheckCode => {
-            console.log(imageCheckCode);
-            this.guiStore.dispatch({actionType: 'image-check-code', imageCheckCode});
+            this.guiStore.dispatch({actionType: 'image-check-code', imageCheckCode, width});
           });
         }
         console.log(this.$code);

@@ -5,14 +5,17 @@ export class Room extends Schema {
 
   initComponent() {
     this.$checkeds = this.shadowDOM.querySelector('#checked');
+    this.$hit = this.shadowDOM.querySelector('#hit');
   }
 
   actionImageCheckCode () {
-    return ['guiStore', ({actionType, imageCheckCode}) => {
+    return ['guiStore', ({actionType, imageCheckCode, width}) => {
       if (actionType === 'image-check-code' && this.typeRoom === 'game') {
         const img = document.createElement('img');
-        img.src = imageCheckCode;
-        this.$checkeds.appendChild(img);
+        img.setAttribute('src', imageCheckCode);
+        img.setAttribute('width', `${width}px`);
+        img.addEventListener('dragstart', event => event.preventDefault());
+        this.$checkeds.insertAdjacentElement('afterbegin', img);
       }
     }];
   }
