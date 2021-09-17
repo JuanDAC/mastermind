@@ -56,10 +56,10 @@ export class Room extends Schema {
   }
 
   actionWindowsResize () {
-    return ['guiStore', ({actionType, innerHeight, innerWidth}) => {
+    return ['guiStore', ({actionType, height, width}) => {
       if (actionType === 'window-resize') {
-        this.style.setProperty('--room--height', `${innerHeight}px`);
-        this.style.setProperty('--room--width', `${innerWidth}px`);
+        this.style.setProperty('--room--height', `${height}px`);
+        this.style.setProperty('--room--width', `${width}px`);
       }
     }];
   }

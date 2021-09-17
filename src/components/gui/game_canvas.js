@@ -6,8 +6,6 @@ export class GameCanvas extends Schema {
   initComponent() {
     this.$canvas = this.shadowDOM.querySelector('main[canvas]');
     this.$rooms = this.shadowDOM.querySelectorAll('slot[room]');
-    console.log('GameCanvas');
-    console.log(this);
   }
 
   template() {
@@ -38,9 +36,9 @@ export class GameCanvas extends Schema {
   }
 
   actionWindowResize() {
-    return ['guiStore', ({actionType, innerHeight}) => {
+    return ['guiStore', ({actionType, height}) => {
       if (actionType === 'window-resize') {
-        this.style.setProperty('--game-canvas--height', `${innerHeight}px`);
+        this.style.setProperty('--game-canvas--height', `${height}px`);
       }
     }];
   }

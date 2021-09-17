@@ -4,16 +4,17 @@ import styles from './app.css';
 import { GameCanvas } from './components/gui/game_canvas.js';
 import { Room } from './components/gui/room.js';
 import { SelectorColors } from './components/game_objects/selector-colors.js';
+import { Gem } from './components/game_objects/gems.js';
 
 window.onresize = () => {
-  const { innerHeight, innerWidth } = window;
-  const actionType = 'window-resize';
-  guiStore.dispatch({ innerHeight, innerWidth, actionType });
+  const {width, height} = window.document.body.getBoundingClientRect();
+  guiStore.dispatch({ width, height, actionType: 'window-resize' });
 };
 
 window.onload = () => {
-  const { innerHeight, innerWidth } = window;
-  guiStore.dispatch({ innerHeight, innerWidth, actionType: 'window-resize' });
+  const {width, height} = window.document.body.getBoundingClientRect();
+  console.log(width, height);
+  guiStore.dispatch({ width, height, actionType: 'window-resize' });
   //  guiStore.reload();
 };
 
@@ -24,3 +25,4 @@ document.head.appendChild(globalStyles);
 window.customElements.define('game-canvas', GameCanvas);
 window.customElements.define('game-room', Room);
 window.customElements.define('game-selector-colors', SelectorColors);
+window.customElements.define('game-gem', Gem);

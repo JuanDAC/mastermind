@@ -28,7 +28,6 @@
   font-weight: 400;
   letter-spacing: 1px;
   text-decoration: none;
-  overflow: hidden;
   transition: 500ms;
   backdrop-filter: bur(15px);
 }

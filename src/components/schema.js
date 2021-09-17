@@ -8,6 +8,7 @@ export class Schema extends HTMLElement {
     this.guiStore = guiStore;
     this.gameStateStore = gameStateStore;
     this.gameAssetsStore = gameAssetsStore;
+    this.registerActionsToStore('actionInit');
   }
 
   disconnectedCallback() {
@@ -18,7 +19,7 @@ export class Schema extends HTMLElement {
     this.setMapComponentAttributes();
     this.render();
     this.initComponent();
-    this.registerActionsToStore();
+    this.registerActionsToStore('action');
   }
 
   render() {
@@ -36,12 +37,12 @@ export class Schema extends HTMLElement {
     });
   }
 
-  registerActionsToStore() {
+  registerActionsToStore(prefix) {
     const methods = [this, Object.getPrototypeOf, Object.getOwnPropertyNames]
       .reduce((value, funct) => funct(value)) || [];
 
     for (const method of methods) {
-      if (method.startsWith('action')) {
+      if (method.startsWith(prefix)) {
         const [store, action] = this[method]();
         this[store].register(action);
       }

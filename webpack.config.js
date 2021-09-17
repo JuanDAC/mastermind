@@ -4,7 +4,7 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = {
   entry: {
-    app: ["@babel/polyfill",  "./src/app.js"],
+    app: ["@babel/polyfill", "./src/app.js"],
   },
   module: {
     rules: [

@@ -3,21 +3,40 @@ import styles from './selector-colors.css';
 
 export class SelectorColors extends Schema {
 
+  constructor() {
+    super();
+    this.numberGeems = 7;
+  }
+
   initComponent() {
+
     this.$section = this.shadowDOM.querySelectorAll('section[room]');
-    this.style.setProperty('--selector-colors--count-geems', 5);
+
+    console.log(this.numberGeems);
+    this.guiStore.dispatch({
+      actionType: 'set-colors',
+      colors: [
+        '#B544DB',
+        '#DB4F8F',
+        '#DBCE5A',
+        '#2EDB32',
+        '#2EDB32',
+        '#2EDB32',
+        '#5A39DB'
+      ].splice(0, this.numberGeems)
+    });
+    this.guiStore.dispatch({
+      actionType: 'number-color',
+      numberColors: this.numberGeems
+    });
   }
 
   template() {
-    this.typeRoom = this.getAttribute('type');
+    const gemsIterator = Array(this.numberGeems + 1).fill('');
+    const gemsElements = gemsIterator.reduce((gems) => `${gems}<game-gem></game-gem>`);
     return `
       <nav class="colors" selector>
-        <div class="geems">
-        </div>
-        <div class="geems"></div>
-        <div class="geems"></div>
-        <div class="geems"></div>
-        <div class="geems"></div>
+        ${gemsElements}
       </nav>
     `;
   }
@@ -37,11 +56,28 @@ export class SelectorColors extends Schema {
   }
 
   actionWindowsResize () {
-    return ['guiStore', ({actionType, innerHeight, innerWidth}) => {
+    return ['guiStore', ({actionType, height, width}) => {
       if (actionType === 'window-resize') {
-        this.style.setProperty('--selector-colors--height', `${innerHeight}px`);
-        this.style.setProperty('--selector-colors--width', `${innerWidth}px`);
-        this.style.setProperty('--selector-colors--size', `${Math.min(innerWidth, innerHeight)}px`);
+        this.style.setProperty('--selector-colors--height', `${height}px`);
+        this.style.setProperty('--selector-colors--width', `${width}px`);
+        this.style.setProperty('--selector-colors--size', `${Math.min(height, width)}px`);
+      }
+    }];
+  }
+
+  actionCheckCode() {
+    return ['guiStore', ({actionType}) => {
+      if (actionType === 'check-code') {
+        this.render();
+      }
+    }];
+  }
+
+  actionNumberGems () {
+    return ['guiStore', ({actionType, numberColors}) => {
+      if (actionType === 'number-color' && this.numberGeems !== numberColors) {
+        this.numberGeems = numberColors;
+        this.render();
       }
     }];
   }
