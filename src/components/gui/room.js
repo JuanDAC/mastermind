@@ -4,7 +4,17 @@ import styles from './room.css';
 export class Room extends Schema {
 
   initComponent() {
-    this.$section = this.shadowDOM.querySelectorAll('section[room]');
+    this.$checkeds = this.shadowDOM.querySelector('#checked');
+  }
+
+  actionImageCheckCode () {
+    return ['guiStore', ({actionType, imageCheckCode}) => {
+      if (actionType === 'image-check-code' && this.typeRoom === 'game') {
+        const img = document.createElement('img');
+        img.src = imageCheckCode;
+        this.$checkeds.appendChild(img);
+      }
+    }];
   }
 
   template() {
@@ -29,8 +39,10 @@ export class Room extends Schema {
     case 'game':
       return `
         <game-selector-colors></game-selector-colors>
-        <div class="cell interaction" id="insert" ></div>
-        <div class="cell chekc" id="check" ></div>
+        <div class="cell interaction" id="insert" >
+          <game-check></game-check>
+        </div>
+        <div class="cell chekc" id="checked" ></div>
         <div class="cell hits" id="hit" ></div>
       `;
     default:

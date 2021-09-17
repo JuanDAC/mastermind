@@ -3,6 +3,7 @@ import { guiStore } from './store.js';
 import styles from './app.css';
 import { GameCanvas } from './components/gui/game_canvas.js';
 import { Room } from './components/gui/room.js';
+import { Check } from './components/gui/check.js';
 import { SelectorColors } from './components/game_objects/selector-colors.js';
 import { Gem } from './components/game_objects/gems.js';
 
@@ -26,3 +27,4 @@ window.customElements.define('game-canvas', GameCanvas);
 window.customElements.define('game-room', Room);
 window.customElements.define('game-selector-colors', SelectorColors);
 window.customElements.define('game-gem', Gem);
+window.customElements.define('game-check', Check);

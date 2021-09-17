@@ -1,26 +1,25 @@
 import { Schema } from '../schema.js';
+import html2canvas from 'html2canvas';
 import styles from './selector-colors.css';
+import { toPng, toJpeg, toBlob, toPixelData, toSvg } from 'html-to-image';
 
 export class SelectorColors extends Schema {
 
   constructor() {
     super();
-    this.numberGeems = 7;
+    this.numberGeems = 5;
   }
 
   initComponent() {
 
-    this.$section = this.shadowDOM.querySelectorAll('section[room]');
+    this.$code = this.shadowDOM.querySelector('nav[selector]');
 
-    console.log(this.numberGeems);
     this.guiStore.dispatch({
       actionType: 'set-colors',
       colors: [
         '#B544DB',
         '#DB4F8F',
         '#DBCE5A',
-        '#2EDB32',
-        '#2EDB32',
         '#2EDB32',
         '#5A39DB'
       ].splice(0, this.numberGeems)
@@ -35,7 +34,7 @@ export class SelectorColors extends Schema {
     const gemsIterator = Array(this.numberGeems + 1).fill('');
     const gemsElements = gemsIterator.reduce((gems) => `${gems}<game-gem></game-gem>`);
     return `
-      <nav class="colors" selector>
+      <nav class="colors" selector data-html2canvas-ignore="true">
         ${gemsElements}
       </nav>
     `;
@@ -68,7 +67,14 @@ export class SelectorColors extends Schema {
   actionCheckCode() {
     return ['guiStore', ({actionType}) => {
       if (actionType === 'check-code') {
-        this.render();
+        if (this.$code) {
+          toPng(this.$code).then(imageCheckCode => {
+            console.log(imageCheckCode);
+            this.guiStore.dispatch({actionType: 'image-check-code', imageCheckCode});
+          });
+        }
+        console.log(this.$code);
+        //this.render();
       }
     }];
   }

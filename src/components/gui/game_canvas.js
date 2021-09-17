@@ -44,8 +44,3 @@ export class GameCanvas extends Schema {
   }
 }
 
-
-
-
-
-

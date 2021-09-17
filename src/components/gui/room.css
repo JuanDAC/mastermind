@@ -52,3 +52,18 @@
   border-radius: 0em 0em 1em 0em;
 }
 
+:host([type="game"]) > *:nth-child(4) {
+	justify-content: start;
+	display: grid;
+	grid-auto-columns: auto;
+	grid-auto-flow: column;
+	gap: 1em;
+	padding: 0px 1em;
+	overflow-y: hidden;
+	overflow-x: auto;
+}
+
+:host([type="game"]) > *:nth-child(4) > *:nth-child(2n) {
+	background-color: rgba(0, 0, 0, 0.06);
+	box-shadow: 0px 0px 0px 0.5em rgba(0, 0, 0, 0.06);
+}

@@ -43,8 +43,8 @@ export class Schema extends HTMLElement {
 
     for (const method of methods) {
       if (method.startsWith(prefix)) {
-        const [store, action] = this[method]();
-        this[store].register(action);
+        const [store, action] = this[method].call(this);
+        this[store].register(action.bind(this));
       }
     }
   }

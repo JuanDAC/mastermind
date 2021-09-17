@@ -19,6 +19,7 @@ export class Gem extends Schema {
             sibling.parentElement && sibling.parentElement.classList.remove('active')
           );
           element.parentElement && element.parentElement.classList.add('active');
+          // TODO get index of this color from array local colors and send event in store
           console.log(color);
         });
       });
@@ -68,7 +69,7 @@ export class Gem extends Schema {
     return ['guiStore', ({actionType, height, width}) => {
       if (actionType === 'window-resize') {
         const minSize = Math.max(
-          Math.min(innerWidth, innerHeight),
+          Math.min(width, height),
           3000 / (this.numberGeems || 4)
         );
         this.style.setProperty('--selector-colors--height', `${height}px`);
