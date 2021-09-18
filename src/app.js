@@ -15,9 +15,8 @@ window.onresize = () => {
 
 window.onload = () => {
   const {width, height} = window.document.body.getBoundingClientRect();
-  console.log(width, height);
   guiStore.dispatch({ width, height, actionType: 'window-resize' });
-  guiStore.dispatch({ actionType: 'efects-volume', volume: 6});
+  guiStore.dispatch({ actionType: 'efects-volume', volume: 1 / 10});
   //  guiStore.reload();
 };
 

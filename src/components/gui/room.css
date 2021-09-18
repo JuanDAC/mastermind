@@ -64,7 +64,6 @@
 	overflow-y: hidden;
 }
 :host([type="game"]) > *:nth-child(4) > * {
-  filter: opacity(.5);
   min-height: 100%;
 }
 :host([type="game"]) > *:nth-child(4) > *:nth-child(2n),
@@ -72,3 +71,21 @@
 	background-color: rgba(0, 0, 0, 0.1);
 	box-shadow: 0px 0px 0px 0.5em rgba(0, 0, 0, 0.1);
 }
+
+
+:host([type="game"]) > *:nth-child(5) > *,
+:host([type="game"]) > *:nth-child(4) > * {
+  animation: checked--add 150ms cubic-bezier(0.650, 0.000, 0.450, 1.000) forwards;
+}
+
+@keyframes checked--add {
+	from {
+		transform: translatex(-200%);
+		filter: opacity(0);
+	}
+	to {
+		transform: translatex(0%);
+		filter: opacity(.5);
+	}
+}
+

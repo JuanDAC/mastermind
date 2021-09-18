@@ -1,21 +1,48 @@
 import { Schema } from '../schema.js';
 import styles from './room.css';
+import { ingameOne } from '../../assets/audio/ingame_one.mp3';
+import { ingameTwo } from '../../assets/audio/ingame_two.mp3';
 
 export class Room extends Schema {
+
+  constructor() {
+    super();
+    this.ingameAudios = [new Audio(ingameOne), new Audio(ingameTwo)];
+  }
 
   initComponent() {
     this.$checkeds = this.shadowDOM.querySelector('#checked');
     this.$hits = this.shadowDOM.querySelector('#hit');
 
-    this.$hits.addEventListener('scroll', () => {
-      const { scrollLeft } = this.$hits;
-      this.$checkeds.scrollLeft = scrollLeft;
-    });
+    this.typeRoom = this.getAttribute('type');
 
-    this.$checkeds.addEventListener('scroll', () => {
-      const { scrollLeft } = this.$checkeds;
-      this.$hits.scrollLeft = scrollLeft;
-    });
+    switch (this.typeRoom) {
+    case 'load':
+      break;
+    case 'home':
+      break;
+    case 'selector-avatar':
+      break;
+    case 'map':
+      break;
+    case 'game':
+      this.$hits.addEventListener('scroll', () => {
+        const { scrollLeft } = this.$hits;
+        this.$checkeds.scrollLeft = scrollLeft;
+      });
+
+      this.$checkeds.addEventListener('scroll', () => {
+        const { scrollLeft } = this.$checkeds;
+        this.$hits.scrollLeft = scrollLeft;
+      });
+
+      // TODO change audio game
+      this.ingameAudios[0].play();
+
+      break;
+    default:
+    }
+
   }
 
   actionImageCheckCode () {

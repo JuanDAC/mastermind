@@ -1,5 +1,6 @@
 import { Schema } from '../schema.js';
 import styles from './check.css';
+import sendCode from '../../assets/audio/send_code.wav';
 
 export class Check extends Schema {
 
@@ -7,6 +8,7 @@ export class Check extends Schema {
     super();
     this.numberGeems = 0;
     this.colors = [];
+    this.sendCodeAudio = new Audio(sendCode);
   }
 
   initComponent() {
@@ -14,6 +16,7 @@ export class Check extends Schema {
     this.addEventListener('click', () => {
       if (bubble) {
         this.classList.add('loading');
+        this.sendCodeAudio.play();
         bubble = false;
         setTimeout(() => {
           this.guiStore.dispatch({actionType: 'check-code'});
@@ -48,6 +51,14 @@ export class Check extends Schema {
         this.style.setProperty('--selector-colors--height', `${height}px`);
         this.style.setProperty('--selector-colors--width', `${width}px`);
         this.style.setProperty('--selector-colors--size', `${minSize}px`);
+      }
+    }];
+  }
+
+  actionChangeVolumeSound() {
+    return ['guiStore', ({actionType, volume}) => {
+      if (actionType === 'efects-volume') {
+        this.sendCodeAudio.volume = volume;
       }
     }];
   }
