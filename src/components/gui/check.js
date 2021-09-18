@@ -10,7 +10,18 @@ export class Check extends Schema {
   }
 
   initComponent() {
-    this.addEventListener('click', () => this.guiStore.dispatch({actionType: 'check-code'}));
+    let bubble = true;
+    this.addEventListener('click', () => {
+      if (bubble) {
+        this.classList.add('loading');
+        bubble = false;
+        setTimeout(() => {
+          this.guiStore.dispatch({actionType: 'check-code'});
+          this.classList.remove('loading');
+          bubble = true;
+        }, 500);
+      }
+    });
   }
 
   template() {
@@ -24,10 +35,6 @@ export class Check extends Schema {
         ${styles.toString()}
       </style>
     `;
-  }
-
-  mapComponentAttributes() {
-    return [];
   }
 
   actionWindowsResize () {

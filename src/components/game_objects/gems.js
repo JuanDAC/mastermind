@@ -1,5 +1,6 @@
 import { Schema } from '../schema.js';
 import styles from './gems.css';
+import chooseGem from '../../assets/audio/choose_gem.wav';
 
 export class Gem extends Schema {
 
@@ -7,15 +8,21 @@ export class Gem extends Schema {
     super();
     this.numberColors = 0;
     this.colors = [];
+    this.chooseGemAudio = new Audio(chooseGem);
   }
 
   initComponent() {
     setTimeout(() => {
       [...this.shadowDOM.querySelectorAll('.select-color')].forEach((element, _, siblings) => {
         element.addEventListener('click', () => {
+          this.classList.add('bubble');
+          setTimeout(() => {
+            this.classList.remove('bubble');
+          }, 600);
+          this.chooseGemAudio.play();
           const elementCSS = getComputedStyle(element);
           const color = elementCSS.getPropertyValue('--background-color');
-          siblings.forEach((sibling) =>
+          siblings.forEach(sibling =>
             sibling.parentElement && sibling.parentElement.classList.remove('active')
           );
           element.parentElement && element.parentElement.classList.add('active');
@@ -79,7 +86,15 @@ export class Gem extends Schema {
     }];
   }
 
-  actionInitNumberGems () {
+  actionChangeVolumeSound() {
+    return ['guiStore', ({actionType, volume}) => {
+      if (actionType === 'efects-volume') {
+        this.chooseGemAudio.volume = volume;
+      }
+    }];
+  }
+
+  actionInitNumberGems() {
     return ['guiStore', ({actionType, numberColors}) => {
       if (actionType === 'number-color' && this.numberGeems !== numberColors) {
         this.style.setProperty('--selector-colors--count-geems', numberColors);
@@ -88,7 +103,6 @@ export class Gem extends Schema {
       }
     }];
   }
-
   actionInitSetColors() {
     return ['guiStore', ({actionType, colors}) => {
       if (actionType === 'set-colors') {

@@ -5,17 +5,30 @@ export class Room extends Schema {
 
   initComponent() {
     this.$checkeds = this.shadowDOM.querySelector('#checked');
-    this.$hit = this.shadowDOM.querySelector('#hit');
+    this.$hits = this.shadowDOM.querySelector('#hit');
+
+    this.$hits.addEventListener('scroll', () => {
+      const { scrollLeft } = this.$hits;
+      this.$checkeds.scrollLeft = scrollLeft;
+    });
+
+    this.$checkeds.addEventListener('scroll', () => {
+      const { scrollLeft } = this.$checkeds;
+      this.$hits.scrollLeft = scrollLeft;
+    });
   }
 
   actionImageCheckCode () {
     return ['guiStore', ({actionType, imageCheckCode, width}) => {
       if (actionType === 'image-check-code' && this.typeRoom === 'game') {
-        const img = document.createElement('img');
-        img.setAttribute('src', imageCheckCode);
-        img.setAttribute('width', `${width}px`);
-        img.addEventListener('dragstart', event => event.preventDefault());
-        this.$checkeds.insertAdjacentElement('afterbegin', img);
+        const $img = document.createElement('img');
+        $img.setAttribute('src', imageCheckCode);
+        $img.setAttribute('width', `${width}px`);
+        $img.addEventListener('dragstart', event => event.preventDefault());
+        this.$checkeds.insertAdjacentElement('afterbegin', $img);
+        const $hit = document.createElement('game-hit');
+        $hit.setAttribute('width', width);
+        this.$hits.insertAdjacentElement('afterbegin', $hit);
       }
     }];
   }
