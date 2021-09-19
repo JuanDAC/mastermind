@@ -1,6 +1,9 @@
-import { guiStore } from './store.js';
+/**
+ * representing a shirt.
+ */
 
 import styles from './app.css';
+import { guiStore } from './store.js';
 import { GameCanvas } from './components/gui/game_canvas.js';
 import { Room } from './components/gui/room.js';
 import { Check } from './components/gui/check.js';
