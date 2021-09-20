@@ -41,6 +41,9 @@ This project devides in back and front, back is interpreted/tested on Ubuntu 14.
    ![hover](readme_images/color_options.png)
 3) Check the game you just selected and see how many matched
    ![hover](readme_images/try.png)
+4) With the results, make a new guess (red are color and position match, white are color match and black are no match). This will appear on your left:
+   ![hover](readme_images/second_try.png)
+5) Continue making tries until you reach the end, you only have 10 tries! Good luck!
 
 ## Usage :computer:
 1) Run 'npm install' command to install all necessary packages
