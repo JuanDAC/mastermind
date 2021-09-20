@@ -62,3 +62,7 @@ def st_get(id, db, key=None):
         if db.get(id) is None:
             return None
         return db.get(id).get(key)
+
+
+def sort_scores(score):
+    return score.get('score')

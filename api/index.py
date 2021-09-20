@@ -3,16 +3,19 @@ from api.helper import make_response
 from api.helper import get_start_args
 from api.helper import get_move_args
 from api.helper import st_get, st_save
+from api.helper import sort_scores
 from flask import abort
 from flask import Flask
 from flask import request
 from flask_cors import CORS
+import datetime as dt
 import json
 import uuid
 import random
 
 
 db = {}
+scores = []
 app = Flask(__name__)
 CORS(app, resource='/*', origins='*')
 
@@ -50,7 +53,8 @@ def start():
         'player_name': player_name,
         'mode': mode,
         'max_rounds': max_rounds,
-        'round': 0
+        'round': 0,
+        'start_time': dt.datetime.now()
     }
 
     st_save(session_id, game, db)
@@ -123,12 +127,42 @@ def check():
         if color >= 0:
             data['no_match'] += 1
 
+    # 6. calculate the score
+    current_time = dt.datetime.now()
+    seconds = current_time - game_data.get('start_time')
+    data['score'] = 1000 * ((60 / seconds) + (5/game_data['round']))
     # 6. Generate the response
     if data['position_match'] == len(user_combination)\
             or game_data['round'] == game_data['max_rounds']:
+        # game over
         data['combination'] = game_data['combination']
+        if data['position_match'] == len(user_combination):
+            data['score'] *= 10
+
+        scores.append({
+            'player_name': game_data.get('player_name'),
+            'time': seconds,
+            'rounds': game_data.get('round'),
+            'score': data['score'],
+            'dificult_level': len(game_data['combination'])
+        })
         return make_response(data)
+
     return make_response(data)
+
+
+@app.route('/scores/', strict_slashes=False)
+@app.route('/scores/<int:page>', strict_slashes=False)
+def scores(page=None):
+    scores_sorted = scores[:]
+    scores_sorted.sort(key=lambda score: score.get('score'))
+    start = 0
+    if page is not None:
+        start = 10 * page
+    end = page + 10
+    if len(scores_sorted) < end:
+        end = len(scores_sorted)
+    return scores_sorted[start: end]
 
 
 @app.errorhandler(404)
