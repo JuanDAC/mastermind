@@ -71,7 +71,7 @@ export class Room extends Schema {
    * @return { [store, imageCheckCodeCallback] } The array containing the store and the action.
    */
   actionImageCheckCode () {
-    return ['guiStore', ({ actionType, imageCheckCode, width }) => {
+    return ['guiStore', ({ actionType, imageCheckCode, width, color_match, position_match, no_match}) => {
       if (actionType === 'image-check-code' && this.typeRoom === 'game') {
         const $img = document.createElement('img');
         $img.setAttribute('src', imageCheckCode);
@@ -79,6 +79,9 @@ export class Room extends Schema {
         $img.addEventListener('dragstart', event => event.preventDefault());
         this.$checkeds.insertAdjacentElement('afterbegin', $img);
         const $hit = document.createElement('game-hit');
+        $hit.setAttribute('black', no_match);
+        $hit.setAttribute('red', position_match);
+        $hit.setAttribute('white', color_match);
         $hit.setAttribute('width', width);
         this.$hits.insertAdjacentElement('afterbegin', $hit);
       }

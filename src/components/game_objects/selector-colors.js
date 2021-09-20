@@ -35,9 +35,8 @@ export class SelectorColors extends Schema {
         const response = await fetch(`${ API }/start?rows=${ numberGeems }&mode=1&max_colors=${ length }&rounds=10&player_name=user`)
           .then((response) => response.json());
         const {game_id: gameId, key, use_colors} = response;
-        this.guiStore.dispatch({
-          actionType: 'set-ids', gameId, key
-        });
+        this.key = key;
+        this.gameId = gameId;
         this.guiStore.dispatch({
           actionType: 'set-colors',
           colors: COLORS.filter((_, index) => use_colors.includes(index))
@@ -110,33 +109,23 @@ export class SelectorColors extends Schema {
     return ['guiStore', ({ actionType }) => {
       if (actionType === 'check-code') {
         if (this.$code) {
+          let data;
           const { width } = this.$code.getBoundingClientRect();
-          const  [...this.$code.children].map($element => $element.getAttribute('select'));
-          (async () => {
-            try {
-              const { length } = COLORS;
-              const { numberGeems } = this;
-              const response = await fetch(`${ API }/check?rows=${ numberGeems }&mode=1&max_colors=${ length }&rounds=10&player_name=user`)
-                .then((response) => response.json());
-              const {game_id: gameId, key, use_colors} = response;
-              this.guiStore.dispatch({
-                actionType: 'set-ids', gameId, key
-              });
-              this.guiStore.dispatch({
-                actionType: 'set-colors',
-                colors: COLORS.filter((_, index) => use_colors.includes(index))
-              });
-              this.guiStore.dispatch({
-                actionType: 'number-color',
-                numberColors: this.numberGeems
-              });
-            } catch(error) {
+          const move = [...(this.$code.children || [])].map($element => $element.getAttribute('select')).join(',');
+          const { key, gameId } = this;
+          console.log(move);
+          fetch(`${ API }/check?move=${ move }&key=${ key }&game_id=${ gameId }`)
+            .then((response) => response.json())
+            .then((responseData) => {
+              data = responseData;
+              return toPng(this.$code);
+            })
+            .then((imageCheckCode) => {
+              this.guiStore.dispatch({ actionType: 'image-check-code', imageCheckCode, width, ...data });
+            })
+            .catch((error) => {
               console.erorr(error);
-            }
-          })();
-          toPng(this.$code).then(imageCheckCode => {
-            this.guiStore.dispatch({ actionType: 'image-check-code', imageCheckCode, width });
-          });
+            });
         }
       }
     }];

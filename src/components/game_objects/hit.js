@@ -27,10 +27,10 @@ export class Hit extends Schema {
         ${red}
       </div>
       <div class="hit">
-        ${black}
+        ${white}
       </div>
       <div class="hit">
-        ${white}
+        ${black}
       </div>
 
     `;
