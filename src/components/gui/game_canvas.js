@@ -69,13 +69,15 @@ export class GameCanvas extends Schema {
     return ['guiStore', ({ actionType, title, button, type, $element}) => {
       if (actionType === 'show-modal') {
         const $modal = document.createElement('game-modal');
-        $modal.setAttribute('title', title);
-        $modal.setAttribute('button', button);
-        $modal.setAttribute('type', type);
+        title && $modal.setAttribute('title', title);
+        button && $modal.setAttribute('button', button);
+        type && $modal.setAttribute('type', type);
         if ($element instanceof HTMLElement) {
+          $element.setAttribute('slot', 'content');
           $modal.appendChild($element);
         }
-        this.$main.insertAdjacentHTML('beforeend', $modal);
+        console.log($modal);
+        this.$main.appendChild($modal);
       }
     }];
   }

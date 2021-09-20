@@ -90,22 +90,19 @@ export class Room extends Schema {
             const myConfetti = confetti.create($element, { resize: true });
             $element.addEventListener('load', () => {
               myConfetti();
-            setTimeout(() => {
-              myConfetti.reset();
-            }, 100);
-
+              setTimeout(() => {
+                confetti.reset();
+              }, 100);
             });
-
-
-
             this.guiStore.dispatch({
               actionType: 'show-modal',
               title: 'You Win',
+              $element
             });
           } else {
             this.guiStore.dispatch({
               actionType: 'show-modal',
-              imageCheckCode,
+              title: 'You lose',
             });
           }
         }

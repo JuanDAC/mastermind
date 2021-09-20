@@ -40,8 +40,8 @@ export class Modal extends Schema {
 
     return `
       <h3 class="title">${title}</h3>
-      '<div class="${close && 'close'}"></div>
-      <slot></slot>
+      <div class="${close && 'close'}"></div>
+      <slot name="content"></slot>
       <div class="button">${button}</div>
     `;
   }
@@ -65,6 +65,7 @@ export class Modal extends Schema {
   mapComponentAttributes () {
     return [
       { key: 'type', value: '' },
+      { key: 'close', value: 'hidden' },
       { key: 'title', value: 'You Win'},
       { key: 'button', value: 'Play Again'}
     ];
