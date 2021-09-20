@@ -66,4 +66,3 @@ typings/
 firebase.json
 
 # webpack output folder
-dist/
