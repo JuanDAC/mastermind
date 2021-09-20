@@ -1,6 +1,6 @@
 # MASTERMIND
 :large_blue_circle: :black_circle: :white_circle: :red_circle:
-Mastermind is a board game developed in the late 70s by Mordecai Meirowitz, an Israeli. This code-breaking game was designed for two players, nevertheless, virtual versions were created in which only a single player is needed. The virtual versions consist in that a machine generates a secret code with a combination of colors and gives you a certain number of tries to decipher it. For each attempt, the machine tells you the number of correct colors (white chips) and the number of chips that are the correct color and in the correct position (red chips). Colors can be repeated in the code, but no blanks can be left. The game ends when the player guesses the combination or when his attempts are finished. If the player guesses the combination, he wins and can play again with a different combination. This project simulates a virtual Mastermind.
+Mastermind is a board game developed in the late 70s by Mordecai Meirowitz, an Israeli. This code-breaking game was designed for two players, nevertheless, virtual versions were created in which only a single player is needed. The virtual versions consist in that a machine generates a secret code with a combination of colors and gives you a certain number of tries to decipher it. For each attempt, the machine tells you the number of correct colors (white chips) and the number of chips that are the correct color and in the correct position (red chips). Colors can be repeated in the code, but no blanks can be left. The game ends when the player guesses the combination or when his attempts are finished. If the player guesses the combination, he wins and can play again with a different combination. This project makes part of the Holberton School pensum and consist in simulating a virtual Mastermind.
 
 ## Table of Content :bookmark:
 * [Environment](#environment)
@@ -32,6 +32,15 @@ This project devides in back and front, back is interpreted/tested on Ubuntu 14.
 * [data](/src/data) - Contains the colors and information about the programs front.
 * [components](/src/components) - Directory with the objects that contains the static page.
 * [audio](/assets/audio) - Audios for the different components of the program.
+
+## How to play
+1) To play you need to access to the webpage: http://34.75.178.179/mastermind/
+   This is how initially would look the interface:
+   ![initial_interface](readme_images/initial_page.png)
+2) Then you can hover over the circles and select the colors:
+   ![hover](readme_images/color_options.png)
+3) Check the game you just selected and see how many matched
+   ![hover](readme_images/try.png)
 
 ## Usage :computer:
 1) Run 'npm install' command to install all necessary packages
