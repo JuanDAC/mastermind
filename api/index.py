@@ -3,10 +3,10 @@ from flask import Flask
 from flask import request
 import uuid
 import random
-from api.common import make_response
-from api.common import get_start_args
-from api.common import get_move_args
-from api.common import st_get, st_save
+from api.helper import make_response
+from api.helper import get_start_args
+from api.helper import get_move_args
+from api.helper import st_get, st_save
 
 
 db={}
@@ -38,7 +38,7 @@ def start():
     # 4. save id and color combination in the session
     if session_id is None:
         session_id = str(uuid.uuid4())
-    data = {
+    game = {
         'id': newId,
         'combination': combination,
         'player_name': player_name,
@@ -47,8 +47,8 @@ def start():
         'round': 0
     }
 
-    st_save(session_id, data, db)
-
+    st_save(session_id, game, db)
+    
     # 5. generate the response
     data = {'id': newId, 'use_colors': color_list, 'key':session_id}
     return make_response(data)
@@ -60,23 +60,29 @@ def check():
     # 1. get parameters
     id, user_combination, key = get_move_args(request)
 
-    if id is None or user_combination is None or len(id) > 36:
+    if key is None or id is None or user_combination is None or len(id) > 36:
         return make_response()
 
     user_combination = [int(i) for i in user_combination.split(',')]
     if len(user_combination) > 7:
         return make_response()
+    print(st_get(key, db) )
+    print(st_get(key, db, id) )
 
-    if st_get(key, db) is None or st_get(key, db, id) != id:
+    if st_get(key, db) is None or st_get(key, db, 'id') != id:
         return make_response()
-
-   # 5. save data in session
-    st_get(key, db, 'round') += 1
-
+    print("Hola Mubndo 3 ")
     # 2. get session data
     game_data = st_get(key, db)
-    # 3. check status of the game
+    if (game_data is None):
+        return make_response()
 
+    game_data['round'] +=1
+
+    # 5. save data in session
+    st_save(key, game_data, db)
+   
+    # 3. check status of the game
     if len(game_data['combination']) != len(user_combination):
         return make_response()
 

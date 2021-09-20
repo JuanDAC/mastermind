@@ -38,9 +38,9 @@ def st_save(id, data, db):
     db[id] = data
 
 
-def st_get(id, db, key=None):
+def st_get(id, db, key = None):
     if key is None:
-        return db[id]
+        return db.get(id)
     else:
         if db.get(id) is None:
             return None
