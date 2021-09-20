@@ -4,7 +4,7 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = {
   entry: {
-    app: ["@babel/polyfill",  "./src/app.js"],
+    app: ["@babel/polyfill", "./src/app.js"],
   },
   module: {
     rules: [
@@ -30,7 +30,7 @@ module.exports = {
         ]
       },
       {
-        test: /\.(png|svg|jpg|gif)$/,
+        test: /\.(png|svg|jpg|gif|mp3|wav)$/,
         use: [
           "file-loader"
         ]

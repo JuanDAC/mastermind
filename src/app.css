@@ -1,17 +1,23 @@
+/*
+---
+name: global
+category: app/global
+tag:
+  - global
+---
+*/
+
 * {
   margin: unset;
   padding: unset;
+  user-select: none;
 }
 
 body {
-  min-height: 100vh;
-} 
+  height: 100vh;
+  min-height: 600px;
+}
 
 :root {
 	--color-primary-background: #350147;
-	--color-primary-background-little: #B544DB;
-	--color-primary-background-rouse: #DB4F8F ;
-	--color-primary-background-yellow: #DBCE5A;
-	--color-primary-background-green: #2EDB32;
-	--color-primary-background-blue: #5A39DB;
-} 
+}

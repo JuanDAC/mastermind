@@ -1,0 +1,74 @@
+/*
+---
+name: Check
+category:
+  - api/components/game_object/check
+tag:
+  - custom element
+---
+
+*/
+
+:host {
+  background-color: red;
+  --width: calc(var(--selector-colors--size) / (12 + var(--selector-colors--count-geems)));
+  width: var(--width);
+  height: calc(var(--selector-colors--size) / (12 + var(--selector-colors--count-geems)));
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: transparent;
+  box-shadow: none;
+  color: #fff;
+  z-index: 1;
+  font-weight: 400;
+  letter-spacing: 1px;
+  text-decoration: none;
+  transition: 500ms;
+  backdrop-filter: bur(15px);
+  --color--check:#49EB4B;
+  cursor: pointer;
+}
+
+:host:before {
+  content: "";
+  width: 30%;
+  height: 50%;
+  box-shadow: inset -2px 0px 0px -1px var(--color--check),
+    inset 0px -2px 0px -1px var(--color--check);
+  transform: rotatez(45deg) translate(-15%, -15%);
+
+}
+
+:host(:hover) {
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: 0px 8px 17px rgba(0, 0, 0, 0.2);
+}
+:host(.loading) {
+  animation: check--hover 500ms linear infinite;
+}
+
+@keyframes check--hover {
+  0% {
+    box-shadow: 0px 8px 17px rgba(0, 0, 0, 0.2),
+      inset 1px 0px 0px 0px var(--color--check);
+  }
+  25% {
+    box-shadow: 0px 8px 17px rgba(0, 0, 0, 0.2),
+      inset 0px 1px 0px 0px var(--color--check);
+  }
+  50% {
+    box-shadow: 0px 8px 17px rgba(0, 0, 0, 0.2),
+      inset -1px 0px 0px 0px var(--color--check);
+  }
+  75% {
+    box-shadow: 0px 8px 17px rgba(0, 0, 0, 0.2),
+      inset 0px -1px 0px 0px var(--color--check);
+  }
+  99.9% {
+    box-shadow: 0px 8px 17px rgba(0, 0, 0, 0.2),
+      inset 1px 0px 0px 0px var(--color--check);
+  }
+}
+
