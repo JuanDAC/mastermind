@@ -1,0 +1,9 @@
+/* default style */
+:host {
+	border-color: #ff584f;
+  background-color: var(--color-primary-background);
+  display: block;
+  width: 100%;
+  height: var(--game-canvas--height);
+} 
+
