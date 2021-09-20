@@ -1,25 +1,23 @@
 """ """
 from flask import Flask
 from flask import request
-from flask import session
-from flask_session import Session
 import uuid
 import random
-from common import make_response
-from common import get_start_args
-from common import get_move_args
+from api.common import make_response
+from api.common import get_start_args
+from api.common import get_move_args
+from api.common import st_get, st_save
 
+
+db={}
 app = Flask(__name__)
-app.config["SESSION_PERMANENT"] = False
-app.config["SESSION_TYPE"] = "filesystem"
-Session(app)
 
 
 @app.route('/start', strict_slashes=False)
 def start():
     """ """
     # 1. validate parameters
-    mode, rows, max_colors, player_name, max_rounds = get_start_args(request)
+    mode, rows, max_colors, player_name, max_rounds, session_id = get_start_args(request)
 
     if rows > 7 or rows < 1 or max_rounds > 50 or max_colors < rows:
         return make_response()
@@ -38,8 +36,9 @@ def start():
         0, rows, 1)] for i in color_list]
     print(combination)
     # 4. save id and color combination in the session
-    # https://www.geeksforgeeks.org/how-to-use-flask-session-in-python-flask/
-    session["game"] = {
+    if session_id is None:
+        session_id = str(uuid.uuid4())
+    data = {
         'id': newId,
         'combination': combination,
         'player_name': player_name,
@@ -48,8 +47,10 @@ def start():
         'round': 0
     }
 
+    st_save(session_id, data, db)
+
     # 5. generate the response
-    data = {'id': newId, 'use_colors': color_list}
+    data = {'id': newId, 'use_colors': color_list, 'key':session_id}
     return make_response(data)
 
 
@@ -57,7 +58,7 @@ def start():
 def check():
     """ """
     # 1. get parameters
-    id, user_combination = get_move_args(request)
+    id, user_combination, key = get_move_args(request)
 
     if id is None or user_combination is None or len(id) > 36:
         return make_response()
@@ -66,14 +67,14 @@ def check():
     if len(user_combination) > 7:
         return make_response()
 
-    if session.get('game') is None or session.get('game').get('id') != id:
+    if st_get(key, db) is None or st_get(key, db, id) != id:
         return make_response()
 
    # 5. save data in session
-    session['game']['round'] += 1
+    st_get(key, db, 'round') += 1
 
     # 2. get session data
-    game_data = session.get('game')
+    game_data = st_get(key, db)
     # 3. check status of the game
 
     if len(game_data['combination']) != len(user_combination):
@@ -108,6 +109,3 @@ def check():
 
     return make_response(data)
 
-
-if __name__ == '__main__':
-    app.run(host='localhost', port=5001, debug=True)
