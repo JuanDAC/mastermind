@@ -21,19 +21,19 @@ import { Hit } from './components/game_objects/hit.js';
 /**
  * Fire the 'window-resize' action when the resize window event occurs
  */
-window.addEventListener('resize ', () => {
+window.onresize = () => {
   const { width, height } = window.document.body.getBoundingClientRect();
   guiStore.dispatch({ width, height, actionType: 'window-resize' });
-});
+};
 
 /**
  * Fire the 'window-resize' 'efects-volume' actions when the load window event occurs
  */
-window.addEventListener('load', () => {
+window.onload = () => {
   const { width, height } = window.document.body.getBoundingClientRect();
   guiStore.dispatch({ width, height, actionType: 'window-resize' });
   guiStore.dispatch({ volume: 2 / 10, actionType: 'efects-volume'});
-});
+};
 
 /** Add styles in head label. */
 const globalStyles =  document.createElement('style');

@@ -1,5 +1,11 @@
-/** Class representing a point. */
+/**
+ * Stores module.
+ * @module app/store
+ */
+
+/** Class representing a Store. */
 export class Store {
+
   /**
    * Create a store.
    * @param { string } name - The name of the store instance.
@@ -30,9 +36,8 @@ export class Store {
 
   /**
    * Shoot an action.
-   * @param { Object } payload - The object that contain the actionType
-   *                             of the storage.
-   * @param { boolean } save - The bolean optional to save data on localstorage
+   * @param { Object } payload - The object that contain the actionType of the storage.
+   * @param { boolean } save - The bolean optional to save data on localstorage.
    *
    */
   dispatch (payload, save) {

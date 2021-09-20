@@ -2,12 +2,11 @@ import { Schema } from '../schema.js';
 import styles from './game_canvas.css';
 
 export class GameCanvas extends Schema {
-
-  initComponent() {
+  initComponent () {
     this.$canvas = this.shadowDOM.querySelector('.canvas');
   }
 
-  template() {
+  template () {
     return `
       <main class="canvas">
         ${this.attributes.text.value}
@@ -15,7 +14,7 @@ export class GameCanvas extends Schema {
     `;
   }
 
-  templateCss() {
+  templateCss () {
     return `
       <style>
         ${styles.toString()}
@@ -23,19 +22,19 @@ export class GameCanvas extends Schema {
     `;
   }
 
-  mapComponentAttributes() {
+  mapComponentAttributes () {
     const attributesMapping = [
-      'text',
+      'text'
     ];
     attributesMapping.forEach(key => {
       if (!this.attributes[key]) {
-        this.attributes[key] = {value: ''};
+        this.attributes[key] = { value: '' };
       }
     });
   }
 
-  addEvents() {
-    this.guiStore.register(({actionType, innerHeight, innerWidth}) => {
+  addEvents () {
+    this.guiStore.register(({ actionType, innerHeight, innerWidth }) => {
       if (actionType === 'window-resize') {
         this.windowHeight = innerHeight;
         this.windowWidth = innerWidth;

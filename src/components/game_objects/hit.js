@@ -1,11 +1,24 @@
+/**
+ * Hit
+ * @module app/components/game_objects/hit
+ */
+
+/** Abstracts imports . */
 import { Schema } from '../schema.js';
+/** Style imports . */
 import styles from './hit.css';
 
+/**
+ * Class representing a Check.
+ * @extends SchemaInterface
+ */
 export class Hit extends Schema {
 
-  initComponent() {}
-
-  template() {
+  /**
+   * Defines the component HTML elements
+   * @return { string } The styles of element with wrapper.
+   */
+  template () {
     const red = this.getAttribute('red');
     const black = this.getAttribute('black');
     const white = this.getAttribute('white');
@@ -23,7 +36,11 @@ export class Hit extends Schema {
     `;
   }
 
-  templateCss() {
+  /**
+   * Defines the component styles
+   * @return { string } The styles of element with wrapper.
+   */
+  templateCss () {
     const width = this.getAttribute('width');
     return `
       <style>
@@ -39,14 +56,16 @@ export class Hit extends Schema {
     `;
   }
 
-  mapComponentAttributes() {
-    // TODO change random to 0
+  /**
+   * Maps the array of attributes.
+   * @return { [ { Key, value } ] } The object that denied an atribute.
+   */
+  mapComponentAttributes () {
     return [
       { key: 'black', value: 0 },
       { key: 'red', value: 0 },
       { key: 'white', value: 0 },
-      { key: 'width', value: 20 },
+      { key: 'width', value: 20 }
     ];
   }
 }
-

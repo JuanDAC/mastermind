@@ -1,17 +1,35 @@
+/**
+ * Gem
+ * @module app/components/game_objects/gem
+ */
+
+/** Abstracts imports . */
 import { Schema } from '../schema.js';
+/** Style imports . */
 import styles from './gems.css';
+/** Files imports . */
 import chooseGem from '../../assets/audio/choose_gem.wav';
 
+/**
+ * Class representing a Store.
+ * @extends Schema
+ */
 export class Gem extends Schema {
 
-  constructor() {
+  /**
+   * Create a Gem.
+   */
+  constructor () {
     super();
     this.numberColors = 0;
     this.colors = [];
     this.chooseGemAudio = new Audio(chooseGem);
   }
 
-  initComponent() {
+  /**
+   * Logic of component after rendering
+   */
+  initComponent () {
     setTimeout(() => {
       [...this.shadowDOM.querySelectorAll('.select-color')].forEach((element, _, siblings) => {
         element.addEventListener('click', () => {
@@ -33,7 +51,11 @@ export class Gem extends Schema {
     });
   }
 
-  template() {
+  /**
+   * Defines the component HTML elements
+   * @return { string } The styles of element with wrapper.
+   */
+  template () {
     const colorsIterator = Array(this.numberColors + 1).fill('');
     const colorsElements = colorsIterator.reduce((colors) => `
       ${colors}
@@ -44,9 +66,13 @@ export class Gem extends Schema {
     return colorsElements;
   }
 
-  templateCss() {
+  /**
+   * Defines the component styles
+   * @return { string } The styles of element with wrapper.
+   */
+  templateCss () {
     let variablesColors = '';
-    (this.colors || []).forEach((color, index, {length}) => {
+    (this.colors || []).forEach((color, index, { length }) => {
       variablesColors += `
         :host(:hover) .wrapper-select-color:nth-child(${index + 2}) {
           transform: rotatez(${index * (360 / length)}deg);
@@ -66,14 +92,22 @@ export class Gem extends Schema {
     `;
   }
 
-  mapComponentAttributes() {
+  /**
+   * Maps the array of attributes.
+   * @return { [ { Key, value } ] } The object that denied an atribute.
+   */
+  mapComponentAttributes () {
     return [
-      { key: 'type', value: 'load' },
+      { key: 'type', value: 'load' }
     ];
   }
 
+  /**
+   * Action that receives dimensions with cumstom properties of css
+   * @return { [store, windowsResizeCallback] } The array containing the store and the action.
+   */
   actionWindowsResize () {
-    return ['guiStore', ({actionType, height, width}) => {
+    return ['guiStore', ({ actionType, height, width }) => {
       if (actionType === 'window-resize') {
         const minSize = Math.max(
           Math.min(width, height),
@@ -86,16 +120,24 @@ export class Gem extends Schema {
     }];
   }
 
-  actionChangeVolumeSound() {
-    return ['guiStore', ({actionType, volume}) => {
+  /**
+   * Action that give the volume of the audio effects
+   * @return { [store, ChangeVolumeSoundCallback] } The array containing the store and the action.
+   */
+  actionChangeVolumeSound () {
+    return ['guiStore', ({ actionType, volume }) => {
       if (actionType === 'efects-volume') {
         this.chooseGemAudio.volume = volume;
       }
     }];
   }
 
-  actionInitNumberGems() {
-    return ['guiStore', ({actionType, numberColors}) => {
+  /**
+   * Action that receives number of gems and set cumstom properties of css after to render.
+   * @return { [store, NumberGemsCallback] } The array containing the store and the action.
+   */
+  actionInitNumberGems () {
+    return ['guiStore', ({ actionType, numberColors }) => {
       if (actionType === 'number-color' && this.numberGeems !== numberColors) {
         this.style.setProperty('--selector-colors--count-geems', numberColors);
         this.numberColors = numberColors;
@@ -103,14 +145,17 @@ export class Gem extends Schema {
       }
     }];
   }
-  actionInitSetColors() {
-    return ['guiStore', ({actionType, colors}) => {
+
+  /**
+   * Action that receives an array of colors after to render.
+   * @return { [store, setColorsCallback ] } The array containing the store and the action.
+   */
+  actionInitSetColors () {
+    return ['guiStore', ({ actionType, colors }) => {
       if (actionType === 'set-colors') {
         this.colors = colors;
         this.render();
       }
     }];
   }
-  
 }
-

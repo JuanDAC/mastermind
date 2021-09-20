@@ -2,13 +2,12 @@ import { Schema } from '../schema.js';
 import styles from './game_canvas.css';
 
 export class GameCanvas extends Schema {
-
-  initComponent() {
+  initComponent () {
     this.$canvas = this.shadowDOM.querySelector('main[canvas]');
     this.$rooms = this.shadowDOM.querySelectorAll('slot[room]');
   }
 
-  template() {
+  template () {
     const roomsIterator = ['rooms', this.getAttribute.bind(this), parseInt, Array]
       .reduce((value, funct) => funct(value)).fill();
 
@@ -21,7 +20,7 @@ export class GameCanvas extends Schema {
     `;
   }
 
-  templateCss() {
+  templateCss () {
     return `
       <style>
         ${styles.toString()}
@@ -29,18 +28,17 @@ export class GameCanvas extends Schema {
     `;
   }
 
-  mapComponentAttributes() {
+  mapComponentAttributes () {
     return [
-      {key: 'rooms', value: 0},
+      { key: 'rooms', value: 0 }
     ];
   }
 
-  actionWindowResize() {
-    return ['guiStore', ({actionType, height}) => {
+  actionWindowResize () {
+    return ['guiStore', ({ actionType, height }) => {
       if (actionType === 'window-resize') {
         this.style.setProperty('--game-canvas--height', `${height}px`);
       }
     }];
   }
 }
-

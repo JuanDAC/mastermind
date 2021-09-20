@@ -1,38 +1,54 @@
+/**
+ * Check
+ * @module app/components/game_objects/check
+ */
+
+/** Abstracts imports . */
 import { Schema } from '../schema.js';
+/** Style imports . */
 import styles from './check.css';
+/** Files imports . */
 import sendCode from '../../assets/audio/send_code.wav';
 
+/**
+ * Class representing a Check.
+ * @extends SchemaInterface
+ */
 export class Check extends Schema {
-
-  constructor() {
+  /**
+   * Create a Check.
+   */
+  constructor () {
     super();
     this.numberGeems = 0;
     this.colors = [];
     this.sendCodeAudio = new Audio(sendCode);
   }
 
-  initComponent() {
-    let bubble = true;
+  /**
+   * Logic of component after rendering
+   */
+  initComponent () {
+    let debounce = true;
     this.addEventListener('click', () => {
-      if (bubble) {
+      if (debounce) {
         this.classList.add('loading');
         this.sendCodeAudio.play();
-        bubble = false;
+        debounce = false;
         setTimeout(() => {
-          this.guiStore.dispatch({actionType: 'check-code'});
+          this.guiStore.dispatch({ actionType: 'check-code' });
           this.classList.remove('loading');
-          bubble = true;
+          debounce = true;
         }, 500);
       }
     });
   }
 
-  template() {
-    return `
-    `;
-  }
-
-  templateCss() {
+  /**
+   * Defines the component styles
+   * @return { string } The styles of element with wrapper.
+   */
+  templateCss () {
     return `
       <style>
         ${styles.toString()}
@@ -40,8 +56,12 @@ export class Check extends Schema {
     `;
   }
 
+  /**
+   * Action that receives dimensions with cumstom properties of css
+   * @return { [store, windowsResizeCallback] } The array containing the store and the action.
+   */
   actionWindowsResize () {
-    return ['guiStore', ({actionType, height, width}) => {
+    return ['guiStore', ({ actionType, height, width }) => {
       if (actionType === 'window-resize') {
         const minSize = Math.max(
           Math.min(width, height),
@@ -55,12 +75,15 @@ export class Check extends Schema {
     }];
   }
 
-  actionChangeVolumeSound() {
-    return ['guiStore', ({actionType, volume}) => {
+  /**
+   * Action that give the volume of the audio effects
+   * @return { [store, windowsResizeCallback] } The array containing the store and the action.
+   */
+  actionChangeVolumeSound () {
+    return ['guiStore', ({ actionType, volume }) => {
       if (actionType === 'efects-volume') {
         this.sendCodeAudio.volume = volume;
       }
     }];
   }
-
 }
