@@ -18,7 +18,7 @@ export class GameCanvas extends Schema {
    * Logic of component after rendering
    */
   initComponent () {
-    this.$canvas = this.shadowDOM.querySelector('main[canvas]');
+    this.$main = this.shadowDOM.querySelector('main[canvas]');
     this.$rooms = this.shadowDOM.querySelectorAll('slot[room]');
   }
 
@@ -51,7 +51,7 @@ export class GameCanvas extends Schema {
     `;
   }
 
-  /**
+  /**te
    * Maps the array of attributes.
    * @return { [ { Key, value } ] } The object that denied an atribute.
    */
@@ -59,6 +59,25 @@ export class GameCanvas extends Schema {
     return [
       { key: 'rooms', value: 0 }
     ];
+  }
+
+  /**
+   * Action that receives options of modal and create element, add in DOM a modal
+   * @return { [store, windowsResizeCallback] } The array containing the store and the action.
+   */
+  actionShowModal() {
+    return ['guiStore', ({ actionType, title, button, type, $element}) => {
+      if (actionType === 'show-modal') {
+        const $modal = document.createElement('game-modal');
+        $modal.setAttribute('title', title);
+        $modal.setAttribute('button', button);
+        $modal.setAttribute('type', type);
+        if ($element instanceof HTMLElement) {
+          $modal.appendChild($element);
+        }
+        this.$main.insertAdjacentHTML('beforeend', $modal);
+      }
+    }];
   }
 
   /**

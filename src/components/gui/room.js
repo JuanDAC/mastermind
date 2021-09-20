@@ -1,6 +1,6 @@
 /**
- * game_canvas
- * @module app/components/game_objects/game_canvas
+ * room
+ * @module app/components/game_objects/room
  */
 
 /** Abstracts imports . */
@@ -11,7 +11,7 @@ import styles from './room.css';
 import { ingameOne } from '../../assets/audio/ingame_one.mp3';
 import { ingameTwo } from '../../assets/audio/ingame_two.mp3';
 /** Data imports . */
-
+import confetti from 'canvas-confetti';
 
 /**
  * Class representing a Room.
@@ -71,7 +71,7 @@ export class Room extends Schema {
    * @return { [store, imageCheckCodeCallback] } The array containing the store and the action.
    */
   actionImageCheckCode () {
-    return ['guiStore', ({ actionType, imageCheckCode, width, color_match, position_match, no_match}) => {
+    return ['guiStore', ({ actionType, imageCheckCode, width, color_match, position_match, no_match, combination}) => {
       if (actionType === 'image-check-code' && this.typeRoom === 'game') {
         const $img = document.createElement('img');
         $img.setAttribute('src', imageCheckCode);
@@ -84,6 +84,31 @@ export class Room extends Schema {
         $hit.setAttribute('white', color_match);
         $hit.setAttribute('width', width);
         this.$hits.insertAdjacentElement('afterbegin', $hit);
+        if (combination) {
+          if (position_match === 4) {
+            const $element = document.createElement('canvas');
+            const myConfetti = confetti.create($element, { resize: true });
+            $element.addEventListener('load', () => {
+              myConfetti();
+            setTimeout(() => {
+              myConfetti.reset();
+            }, 100);
+
+            });
+
+
+
+            this.guiStore.dispatch({
+              actionType: 'show-modal',
+              title: 'You Win',
+            });
+          } else {
+            this.guiStore.dispatch({
+              actionType: 'show-modal',
+              imageCheckCode,
+            });
+          }
+        }
       }
     }];
   }
@@ -114,6 +139,7 @@ export class Room extends Schema {
     `;
     case 'game':
       return `
+      <h1>mastermind</h1>
       <game-selector-colors></game-selector-colors>
       <div class="cell interaction" id="insert" >
         <game-check></game-check>

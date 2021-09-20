@@ -11,6 +11,7 @@ import { guiStore } from './store.js';
 /** Components GUI imports . */
 import { GameCanvas } from './components/gui/game_canvas.js';
 import { Room } from './components/gui/room.js';
+import { Modal } from './components/gui/modal.js';
 
 /** Components game objects imports . */
 import { Check } from './components/game_objects/check.js';
@@ -47,3 +48,4 @@ window.customElements.define('game-selector-colors', SelectorColors);
 window.customElements.define('game-gem', Gem);
 window.customElements.define('game-check', Check);
 window.customElements.define('game-hit', Hit);
+window.customElements.define('game-modal', Modal);

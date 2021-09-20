@@ -27,11 +27,11 @@ export class SelectorColors extends Schema {
    */
   initComponent () {
     this.$code = this.shadowDOM.querySelector('nav[selector]');
+    const { length } = COLORS;
+    const { numberGeems } = this;
 
     (async () => {
       try {
-        const { length } = COLORS;
-        const { numberGeems } = this;
         const response = await fetch(`${ API }/start?rows=${ numberGeems }&mode=1&max_colors=${ length }&rounds=10&player_name=user`)
           .then((response) => response.json());
         const {game_id: gameId, key, use_colors} = response;
@@ -43,10 +43,35 @@ export class SelectorColors extends Schema {
         });
         this.guiStore.dispatch({
           actionType: 'number-color',
-          numberColors: this.numberGeems
+          numberColors: numberGeems
         });
       } catch(error) {
-        console.erorr(error);
+        /* mode ofline */
+        const indexes = Array(length).fill().map((_, index) => index);
+
+        /* set array colors to use */
+        const use_colors = [];
+        Array(numberGeems).fill().forEach(() => {
+          const index = Math.floor(Math.random() * indexes.length);
+          use_colors.push(indexes.splice(index, 1).pop());
+        });
+
+        /* set array if code private */
+        this.__code = [];
+        Array(numberGeems).fill().forEach(() => {
+          const index = Math.floor(Math.random() * use_colors.length);
+          this.__code.push(use_colors.slice(index, index + 1).pop());
+        });
+
+        this.guiStore.dispatch({
+          actionType: 'set-colors',
+          colors: COLORS.filter((_, index) => use_colors.includes(index))
+        });
+
+        this.guiStore.dispatch({
+          actionType: 'number-color',
+          numberColors: numberGeems
+        });
       }
     })();
   }
@@ -109,22 +134,60 @@ export class SelectorColors extends Schema {
     return ['guiStore', ({ actionType }) => {
       if (actionType === 'check-code') {
         if (this.$code) {
-          let data;
+          let imageCheckCode = false;
           const { width } = this.$code.getBoundingClientRect();
           const move = [...(this.$code.children || [])].map($element => $element.getAttribute('select')).join(',');
           const { key, gameId } = this;
           console.log(move);
-          fetch(`${ API }/check?move=${ move }&key=${ key }&game_id=${ gameId }`)
+          toPng(this.$code)
+            .then(image => {
+              /* save screenshot in variable */
+              imageCheckCode = image;
+              /* send the fetch */
+              if (!key) {
+                throw new Error('Not key');
+              }
+              return fetch(`${ API }/check?move=${ move }&key=${ key }&game_id=${ gameId }`);
+            })
+            /* transform responce in json */
             .then((response) => response.json())
-            .then((responseData) => {
-              data = responseData;
-              return toPng(this.$code);
-            })
-            .then((imageCheckCode) => {
+            /* dispatch 'image-check-code' whith data to storage */
+            .then((data) => this.guiStore.dispatch({ actionType: 'image-check-code', imageCheckCode, width, ...data }))
+            .catch(() => {
+              if (!imageCheckCode) {
+                return;
+              }
+              console.log('ofline');
+              /* mode ofline */
+              let currentMove = move.split(',').map(character => parseInt(character));
+              const currentKey = this.__code.slice();
+              /* get positions and color */
+              currentMove.forEach((value, index) => {
+                if (currentMove[index] === currentKey[index]) {
+                  currentMove[index] = currentKey[index] = 'r';
+                }
+              });
+              /* get only color */
+              currentMove.forEach((value, index) => {
+                if (typeof value === 'number' && currentKey.includes(value)) {
+                  currentMove[index] = currentKey[currentKey.indexOf(value)] = 'c';
+                }
+              });
+              /* get no color no position */
+              currentMove.forEach((value, index) => {
+                if (typeof value === 'number' && !currentKey.includes(value)) {
+                  currentMove[index] = 'n';
+                }
+              });
+              
+              /* parse data */
+              const data = {
+                color_match: [0, ...currentMove].reduce((acum, value) => acum + Number(value === 'c')),
+                position_match: [0, ...currentMove].reduce((acum, value) => acum + Number(value === 'r')),
+                no_match: [0, ...currentMove].reduce((acum, value) => acum + Number(value === 'n')),
+              };
+              /* dispatch 'image-check-code' whith data to storage */
               this.guiStore.dispatch({ actionType: 'image-check-code', imageCheckCode, width, ...data });
-            })
-            .catch((error) => {
-              console.erorr(error);
             });
         }
       }
