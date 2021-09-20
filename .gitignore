@@ -67,3 +67,5 @@ firebase.json
 
 # webpack output folder
 dist/
+*/__pycache__/*
+api/flask_session/*
