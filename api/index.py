@@ -3,6 +3,7 @@ import json
 from flask import abort
 from flask import Flask
 from flask import request
+from flask_cors import CORS
 import uuid
 import random
 from api.helper import make_response
@@ -13,7 +14,7 @@ from api.helper import st_get, st_save
 
 db = {}
 app = Flask(__name__)
-
+CORS(app, resource='/*', origins='*')
 
 @app.route('/start', strict_slashes=False)
 def start():
@@ -37,7 +38,7 @@ def start():
 
     combination = [color_list[random.randrange(
         0, rows, 1)] for i in color_list]
-    print(combination)
+    print("correct", combination)
     # 4. save id and color combination in the session
     if session_id is None:
         session_id = str(uuid.uuid4())
@@ -93,6 +94,8 @@ def check():
     if len(game_data['combination']) != len(user_combination):
         abort(400, "Invalid Move")
 
+
+    print("correct",user_combination)
     data = {'color_match': 0, 'position_match': 0, 'no_match': 0}
 
     # finished game
@@ -105,7 +108,7 @@ def check():
     for i, color in enumerate(user_combination):
         if color == clave[i]:
             data['position_match'] += 1
-            clave[clave.index(color)] = -1
+            clave[i] = -1
 
     for i, color in enumerate(user_combination):
         if color in clave:
@@ -120,7 +123,7 @@ def check():
             or game_data['round'] == game_data['max_rounds']:
         data['combination'] = game_data['combination']
         return make_response(data)
-
+    print('salida', data)
     return make_response(data)
 
 
