@@ -95,7 +95,7 @@ def check():
         abort(400, "Invalid Move")
 
 
-    print("correct",user_combination)
+    print("User Combination",user_combination)
     data = {'color_match': 0, 'position_match': 0, 'no_match': 0}
 
     # finished game
@@ -109,21 +109,27 @@ def check():
         if color == clave[i]:
             data['position_match'] += 1
             clave[i] = -1
+            user_combination[i] = -2
 
     for i, color in enumerate(user_combination):
+        print("error 5",i, color)
         if color in clave:
             data['color_match'] += 1
             clave[clave.index(color)] = -1
+            user_combination[i] = -2
 
-    data['no_match'] = len(user_combination)\
-        - data['position_match'] - data['color_match']
+    
+    for i, color in enumerate(clave):
+        if color >= 0:
+            data['no_match'] += 1
+
 
     # 6. generate the response
     if data['position_match'] == len(user_combination)\
             or game_data['round'] == game_data['max_rounds']:
         data['combination'] = game_data['combination']
         return make_response(data)
-    print('salida', data)
+    # print('salida', data)
     return make_response(data)
 
 
