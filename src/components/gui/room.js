@@ -11,7 +11,6 @@ import styles from './room.css';
 import { ingameOne } from '../../assets/audio/ingame_one.mp3';
 import { ingameTwo } from '../../assets/audio/ingame_two.mp3';
 /** Data imports . */
-import confetti from 'canvas-confetti';
 
 /**
  * Class representing a Room.
@@ -85,24 +84,20 @@ export class Room extends Schema {
         $hit.setAttribute('width', width);
         this.$hits.insertAdjacentElement('afterbegin', $hit);
         if (combination) {
+          const $element = document.createElement('img');
           if (position_match === 4) {
-            const $element = document.createElement('canvas');
-            const myConfetti = confetti.create($element, { resize: true });
-            $element.addEventListener('load', () => {
-              myConfetti();
-              setTimeout(() => {
-                confetti.reset();
-              }, 100);
-            });
+            $element.setAttribute('src', 'https://acegif.com/wp-content/gif/confetti-40.gif');
             this.guiStore.dispatch({
               actionType: 'show-modal',
               title: 'You Win',
               $element
             });
           } else {
+            $element.setAttribute('src', 'https://acegif.com/wp-content/gifs/sad-cat-67.gif');
             this.guiStore.dispatch({
               actionType: 'show-modal',
               title: 'You lose',
+              $element
             });
           }
         }
