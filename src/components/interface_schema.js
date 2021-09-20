@@ -57,6 +57,10 @@ export class SchemaInterface extends HTMLElement {
   template () {}
 
   /**
+   * Defines asyncrousnoly the component HTML elements
+   */
+  async templateAsync () {}
+  /**
    * Logic of component after rendering
    */
   initComponent () {}

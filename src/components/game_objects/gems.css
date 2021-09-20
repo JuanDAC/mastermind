@@ -1,3 +1,14 @@
+/*
+---
+name: Gems
+category:
+  - api/components/game_object/gems
+tag:
+  - custom element
+---
+
+*/
+
 :host, .select-color  {
   background-color: red;
   width: calc(var(--selector-colors--size) / (12 + var(--selector-colors--count-geems)));

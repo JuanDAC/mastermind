@@ -11,6 +11,7 @@ import styles from './room.css';
 import { ingameOne } from '../../assets/audio/ingame_one.mp3';
 import { ingameTwo } from '../../assets/audio/ingame_two.mp3';
 /** Data imports . */
+import { API, COLORS } from '../../data/statics.js';
 
 
 /**
@@ -89,9 +90,8 @@ export class Room extends Schema {
    * Defines the component HTML elements
    * @return { string } The styles of element with wrapper.
    */
-  template() {
+  async templateAsync() {
     this.typeRoom = this.getAttribute('type');
-
     switch (this.typeRoom) {
     case 'load':
       return `
@@ -110,6 +110,19 @@ export class Room extends Schema {
       <slot></slot>
     `;
     case 'game':
+      let useColors, key;
+      try {
+      const { length } = COLORS;
+      const response = await fetch(`${ API }/start?rows=4&mode=1&max_colors=${ length }&rounds=10&player_name=user`)
+          .then((response) => response.json());
+
+        const {game_id: gameId, key, use_colors: useColors} = response;
+        this.key = key;
+        this.gameId = gameId;
+        this.useColors = useColors;
+      } catch(error) {
+        console.erorr(error);
+      };
       return `
       <game-selector-colors></game-selector-colors>
       <div class="cell interaction" id="insert" >

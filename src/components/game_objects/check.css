@@ -1,3 +1,14 @@
+/*
+---
+name: Check
+category:
+  - api/components/game_object/check
+tag:
+  - custom element
+---
+
+*/
+
 :host {
   background-color: red;
   --width: calc(var(--selector-colors--size) / (12 + var(--selector-colors--count-geems)));

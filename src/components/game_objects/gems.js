@@ -9,6 +9,8 @@ import { Schema } from '../schema.js';
 import styles from './gems.css';
 /** Files imports . */
 import chooseGem from '../../assets/audio/choose_gem.wav';
+/** Data imports . */
+import { COLORS } from '../../data/statics.js';
 
 /**
  * Class representing a Store.
@@ -30,6 +32,9 @@ export class Gem extends Schema {
    * Logic of component after rendering
    */
   initComponent () {
+    /**
+     * TODO register this method like a action when load elements
+     */
     setTimeout(() => {
       [...this.shadowDOM.querySelectorAll('.select-color')].forEach((element, _, siblings) => {
         element.addEventListener('click', () => {
@@ -44,11 +49,10 @@ export class Gem extends Schema {
             sibling.parentElement && sibling.parentElement.classList.remove('active')
           );
           element.parentElement && element.parentElement.classList.add('active');
-          // TODO get index of this color from array local colors and send event in store
-          console.log(color);
+          this.setAttribute('select', COLORS.indexOf(color));
         });
       });
-    });
+    }, 1000);
   }
 
   /**
@@ -141,6 +145,7 @@ export class Gem extends Schema {
       if (actionType === 'number-color' && this.numberGeems !== numberColors) {
         this.style.setProperty('--selector-colors--count-geems', numberColors);
         this.numberColors = numberColors;
+        console.log(numberColors);
         this.render();
       }
     }];
@@ -154,6 +159,7 @@ export class Gem extends Schema {
     return ['guiStore', ({ actionType, colors }) => {
       if (actionType === 'set-colors') {
         this.colors = colors;
+        console.log(colors);
         this.render();
       }
     }];

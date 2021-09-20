@@ -9,6 +9,8 @@ import { Schema } from '../schema.js';
 import styles from './selector-colors.css';
 /** Libraries imports . */
 import { toPng } from 'html-to-image';
+/** Data imports . */
+import { API, COLORS } from '../../data/statics.js';
 
 /**
  * Class representing a SelectorColors.
@@ -17,7 +19,7 @@ import { toPng } from 'html-to-image';
 export class SelectorColors extends Schema {
   constructor () {
     super();
-    this.numberGeems = 5;
+    this.numberGeems = 4;
   }
 
   /**
@@ -26,20 +28,28 @@ export class SelectorColors extends Schema {
   initComponent () {
     this.$code = this.shadowDOM.querySelector('nav[selector]');
 
-    this.guiStore.dispatch({
-      actionType: 'set-colors',
-      colors: [
-        '#B544DB',
-        '#DB4F8F',
-        '#DBCE5A',
-        '#2EDB32',
-        '#5A39DB'
-      ].splice(0, this.numberGeems)
-    });
-    this.guiStore.dispatch({
-      actionType: 'number-color',
-      numberColors: this.numberGeems
-    });
+    (async () => {
+      try {
+        const { length } = COLORS;
+        const { numberGeems } = this;
+        const response = await fetch(`${ API }/start?rows=${ numberGeems }&mode=1&max_colors=${ length }&rounds=10&player_name=user`)
+          .then((response) => response.json());
+        const {game_id: gameId, key, use_colors} = response;
+        this.guiStore.dispatch({
+          actionType: 'set-ids', gameId, key
+        });
+        this.guiStore.dispatch({
+          actionType: 'set-colors',
+          colors: COLORS.filter((_, index) => use_colors.includes(index))
+        });
+        this.guiStore.dispatch({
+          actionType: 'number-color',
+          numberColors: this.numberGeems
+        });
+      } catch(error) {
+        console.erorr(error);
+      }
+    })();
   }
 
   /**
@@ -101,6 +111,29 @@ export class SelectorColors extends Schema {
       if (actionType === 'check-code') {
         if (this.$code) {
           const { width } = this.$code.getBoundingClientRect();
+          const  [...this.$code.children].map($element => $element.getAttribute('select'));
+          (async () => {
+            try {
+              const { length } = COLORS;
+              const { numberGeems } = this;
+              const response = await fetch(`${ API }/check?rows=${ numberGeems }&mode=1&max_colors=${ length }&rounds=10&player_name=user`)
+                .then((response) => response.json());
+              const {game_id: gameId, key, use_colors} = response;
+              this.guiStore.dispatch({
+                actionType: 'set-ids', gameId, key
+              });
+              this.guiStore.dispatch({
+                actionType: 'set-colors',
+                colors: COLORS.filter((_, index) => use_colors.includes(index))
+              });
+              this.guiStore.dispatch({
+                actionType: 'number-color',
+                numberColors: this.numberGeems
+              });
+            } catch(error) {
+              console.erorr(error);
+            }
+          })();
           toPng(this.$code).then(imageCheckCode => {
             this.guiStore.dispatch({ actionType: 'image-check-code', imageCheckCode, width });
           });
