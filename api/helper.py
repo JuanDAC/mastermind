@@ -1,8 +1,12 @@
+""" This module contains function used for secondary purpose as formating
+    responses or extracting data from URL. """
 import json
 
 
 def make_response(data=None):
-    """ """
+    """ Formats incoming data to a reponse-like structure.
+        Parameters:
+            data: Data to cast into json. """
     from api.index import app
 
     return app.response_class(
@@ -13,6 +17,9 @@ def make_response(data=None):
 
 
 def get_start_args(request):
+    """ Extracts parameters from a request used to start the program.
+        Parameters:
+            request: request from which data is extracted. """
     session_id = request.args.get('key', type=str)
     mode = request.args.get('mode', default=1, type=int)
     rows = request.args.get('rows', default=4, type=int)
@@ -24,6 +31,9 @@ def get_start_args(request):
 
 
 def get_move_args(request):
+    """ Extracts parameters from a request used to check a players game.
+        Parameters:
+            request: request from which data is extracted. """
     key = request.args.get('key', type=str)
     id = request.args.get('game_id', type=str)
     move = request.args.get('move', type=str)
@@ -32,10 +42,20 @@ def get_move_args(request):
 
 
 def st_save(id, data, db):
+    """ Stores data from a game with its id.
+        Parameters:
+            id: id of the game to store data to.
+            data: information to store.
+            db: data storage. """
     db[id] = data
 
 
-def st_get(id, db, key = None):
+def st_get(id, db, key=None):
+    """ Gets data from a game with the id.
+        Parameters:
+            id: id of the game to get data from.
+            db: data storage.
+            key: name of variable to look data from. """
     if key is None:
         return db.get(id)
     else:
