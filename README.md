@@ -2,7 +2,7 @@
 :large_blue_circle: :black_circle: :white_circle: :red_circle:
 Mastermind was a board game developed in the laste 70s by Mordecai Meirowitz, and Israeli. This code-breaking game was designed for two players, nevertheless, virtual versions were created were a single player is needed. The virtual version consists in that a machine generates a secret code with a combination of colors and gives you a certain number of tries to decipher it. For each attempt, the machine tells you the number of correct colors (white chips) and the number of chips that are the correct color and in the correct position (red chips). Colors can be repeated in the code, but no blanks can be left. The game ends when the player guesses the combination or when his attempts are finished. If the player guesses the combination, he wins and can play again with a different combination. This project simulates a virtual Mastermind.
 
-## Table of Content
+## Table of Content :bookmark:
 * [Environment](#environment)
 * [Installation](#installation)
 * [File Descriptions](#file-descriptions)
@@ -10,11 +10,11 @@ Mastermind was a board game developed in the laste 70s by Mordecai Meirowitz, an
 * [Bugs](#bugs)
 * [Authors](#authors)
 
-## Environment
+## Environment :gear:
 This project devides in back and front, back is interpreted/tested on Ubuntu 14.04 LTS using Python3 (version 3.4.3) and front is designed on Javascript/CSS/HTML.
 
-## File descriptions
-#### `api/` directory contains backend for this project, this means that has the logic behing the game and contains an API to handle requests front-back and back-front:
+## File descriptions :page_with_curl:
+#### `api/` directory contains backend for this project, this means that has the logic behind the game and contains an API to handle requests front-back and back-front:
 [helper.py](/api/helper.py) - File has functions used as tools for the API.
 * `def make_response(data=None)` - Creates the response json structure for specified data. 
 * `def get_start_args(request)` - Retrieves and casts data from the URL related to starting the game
@@ -27,7 +27,13 @@ This project devides in back and front, back is interpreted/tested on Ubuntu 14.
 * `def check()` - Checks a game played by the playes and returns how many matches it had.
 * `def not_found(error)` - Handles errors.
 
-## Usage
+#### `src/` directory contains the frontend of this project, this means that has the static cintent, visual part of the project:
+* [src](/src) - Directory with all the components of the visual page, css, html, js files.
+* [data](/src/data) - Contains the colors and information about the programs front.
+* [components](/src/components) - Directory with the objects that contains the static page.
+* [audio](/assets/audio) - Audios for the different components of the program.
+
+## Usage :computer:
 1) Run 'npm install' command to install all necessary packages
 2) To run the game choose one of the options:
 
@@ -42,10 +48,10 @@ This project devides in back and front, back is interpreted/tested on Ubuntu 14.
 
 4) To build and deploy your website to the newly created firebase hosting simply run command `npm run deploy`
 
-## Bugs
+## Bugs :ant:
 No known bugs at this time.
 
-## Authors
+## Authors :black_nib:
 Juan David Avila - [Github](https://github.com/JuanDAC) / [Twitter](https://twitter.com/juanDAC_Dev)
 
 Jerson Perez - [Github](https://github.com/jepez90) / [Twitter](https://twitter.com/Jepez90) 
