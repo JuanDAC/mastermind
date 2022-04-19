@@ -18,14 +18,14 @@ export class Modal extends Schema {
   /**
    * Logic of component after rendering
    */
-  initComponent () {
+  initComponent() {
     const typeModal = this.getAttribute('type');
     this.$button = this.shadowDOM.querySelector('.button');
     this.$button.addEventListener('click', () => location.reload());
     switch (typeModal) {
-    case 'to-win':
-    case 'lose':
-    default:
+      case 'to-win':
+      case 'lose':
+      default:
     }
   }
 
@@ -37,11 +37,12 @@ export class Modal extends Schema {
     const title = this.getAttribute('title');
     const button = this.getAttribute('button');
     const close = this.getAttribute('close');
+    const content = this.getAttribute('content');
 
     return `
       <h3 class="title">${title}</h3>
       <div class="${close && 'close'}"></div>
-      <slot name="content"></slot>
+      <main>${content}</main>
       <div class="button">${button}</div>
     `;
   }
@@ -62,12 +63,12 @@ export class Modal extends Schema {
    * Maps the array of attributes.
    * @return { [ { Key, value } ] } The object that denied an atribute.
    */
-  mapComponentAttributes () {
+  mapComponentAttributes() {
     return [
       { key: 'type', value: '' },
       { key: 'close', value: 'hidden' },
-      { key: 'title', value: 'You Win'},
-      { key: 'button', value: 'Play Again'}
+      { key: 'title', value: 'You Win' },
+      { key: 'button', value: 'Play Again' }
     ];
   }
 
@@ -75,7 +76,7 @@ export class Modal extends Schema {
    * Action that receives dimensions with cumstom properties of css
    * @return { [store, windowsResizeCallback] } The array containing the store and the action.
    */
-  actionWindowsResize () {
+  actionWindowsResize() {
     return ['guiStore', ({ actionType, height, width }) => {
       if (actionType === 'window-resize') {
         this.style.setProperty('--modal--height', `${height * 0.9}px`);

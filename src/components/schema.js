@@ -16,7 +16,7 @@ export class Schema extends SchemaInterface {
   /**
    * Instance a schema.
    */
-  constructor () {
+  constructor() {
     super();
     this.shadowDOM = this.attachShadow({ mode: 'open' });
     this.guiStore = guiStore;
@@ -28,14 +28,14 @@ export class Schema extends SchemaInterface {
   /**
    * Delete element when removed from DOM.
    */
-  disconnectedCallback () {
+  disconnectedCallback() {
     this.remove();
   }
 
   /**
    * Starts the component logic when it's added to the DOM.
    */
-  connectedCallback () {
+  connectedCallback() {
     this.setMapComponentAttributes();
     this.render();
     this.initComponent();
@@ -45,7 +45,7 @@ export class Schema extends SchemaInterface {
   /**
    * Render the CSS styles and HTML elements of the component.
    */
-  render () {
+  render() {
     this.shadowDOM.innerHTML = `
       ${this.templateCss() || ''}
       ${this.template() || ''}
@@ -55,7 +55,7 @@ export class Schema extends SchemaInterface {
   /**
    * Set default component attributes.
    */
-  setMapComponentAttributes () {
+  setMapComponentAttributes() {
     (this.mapComponentAttributes() || []).forEach(({ key, value }) => {
       if (this.getAttribute(key) === null) {
         this.setAttribute(String(key), String(value));
@@ -67,7 +67,7 @@ export class Schema extends SchemaInterface {
    * Registers the action type methods.
    * @param { string } prefix - The prefix of methos to register in store.
    */
-  registerActionsToStore (prefix) {
+  registerActionsToStore(prefix) {
     const methods = [this, Object.getPrototypeOf, Object.getOwnPropertyNames]
       .reduce((value, funct) => funct(value)) || [];
 

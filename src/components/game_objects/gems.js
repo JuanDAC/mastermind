@@ -21,7 +21,7 @@ export class Gem extends Schema {
   /**
    * Create a Gem.
    */
-  constructor () {
+  constructor() {
     super();
     this.numberColors = 0;
     this.colors = [];
@@ -31,7 +31,7 @@ export class Gem extends Schema {
   /**
    * Logic of component after rendering
    */
-  initComponent () {
+  initComponent() {
     /**
      * TODO register this method like a action when load elements
      */
@@ -49,7 +49,7 @@ export class Gem extends Schema {
             sibling.parentElement && sibling.parentElement.classList.remove('active')
           );
           element.parentElement && element.parentElement.classList.add('active');
-          this.setAttribute('select', COLORS.indexOf(color));
+          this.setAttribute('select', COLORS.indexOf(color.trim()));
         });
       });
     }, 1000);
@@ -59,7 +59,7 @@ export class Gem extends Schema {
    * Defines the component HTML elements
    * @return { string } The styles of element with wrapper.
    */
-  template () {
+  template() {
     const colorsIterator = Array(this.numberColors + 1).fill('');
     const colorsElements = colorsIterator.reduce((colors) => `
       ${colors}
@@ -74,7 +74,7 @@ export class Gem extends Schema {
    * Defines the component styles
    * @return { string } The styles of element with wrapper.
    */
-  templateCss () {
+  templateCss() {
     let variablesColors = '';
     (this.colors || []).forEach((color, index, { length }) => {
       variablesColors += `
@@ -100,7 +100,7 @@ export class Gem extends Schema {
    * Maps the array of attributes.
    * @return { [ { Key, value } ] } The object that denied an atribute.
    */
-  mapComponentAttributes () {
+  mapComponentAttributes() {
     return [
       { key: 'type', value: 'load' }
     ];
@@ -110,7 +110,7 @@ export class Gem extends Schema {
    * Action that receives dimensions with cumstom properties of css
    * @return { [store, windowsResizeCallback] } The array containing the store and the action.
    */
-  actionWindowsResize () {
+  actionWindowsResize() {
     return ['guiStore', ({ actionType, height, width }) => {
       if (actionType === 'window-resize') {
         const minSize = Math.max(
@@ -128,7 +128,7 @@ export class Gem extends Schema {
    * Action that give the volume of the audio effects
    * @return { [store, ChangeVolumeSoundCallback] } The array containing the store and the action.
    */
-  actionChangeVolumeSound () {
+  actionChangeVolumeSound() {
     return ['guiStore', ({ actionType, volume }) => {
       if (actionType === 'efects-volume') {
         this.chooseGemAudio.volume = volume;
@@ -140,7 +140,7 @@ export class Gem extends Schema {
    * Action that receives number of gems and set cumstom properties of css after to render.
    * @return { [store, NumberGemsCallback] } The array containing the store and the action.
    */
-  actionInitNumberGems () {
+  actionInitNumberGems() {
     return ['guiStore', ({ actionType, numberColors }) => {
       if (actionType === 'number-color' && this.numberGeems !== numberColors) {
         this.style.setProperty('--selector-colors--count-geems', numberColors);
@@ -155,7 +155,7 @@ export class Gem extends Schema {
    * Action that receives an array of colors after to render.
    * @return { [store, setColorsCallback ] } The array containing the store and the action.
    */
-  actionInitSetColors () {
+  actionInitSetColors() {
     return ['guiStore', ({ actionType, colors }) => {
       if (actionType === 'set-colors') {
         this.colors = colors;

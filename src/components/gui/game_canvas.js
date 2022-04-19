@@ -17,7 +17,7 @@ export class GameCanvas extends Schema {
   /**
    * Logic of component after rendering
    */
-  initComponent () {
+  initComponent() {
     this.$main = this.shadowDOM.querySelector('main[canvas]');
     this.$rooms = this.shadowDOM.querySelectorAll('slot[room]');
   }
@@ -26,7 +26,7 @@ export class GameCanvas extends Schema {
    * Defines the component HTML elements
    * @return { string } The styles of element with wrapper.
    */
-  template () {
+  template() {
     const roomsIterator = ['rooms', this.getAttribute.bind(this), parseInt, Array]
       .reduce((value, funct) => funct(value)).fill();
 
@@ -43,7 +43,7 @@ export class GameCanvas extends Schema {
    * Defines the component styles
    * @return { string } The styles of element with wrapper.
    */
-  templateCss () {
+  templateCss() {
     return `
       <style>
         ${styles.toString()}
@@ -55,7 +55,7 @@ export class GameCanvas extends Schema {
    * Maps the array of attributes.
    * @return { [ { Key, value } ] } The object that denied an atribute.
    */
-  mapComponentAttributes () {
+  mapComponentAttributes() {
     return [
       { key: 'rooms', value: 0 }
     ];
@@ -66,17 +66,13 @@ export class GameCanvas extends Schema {
    * @return { [store, windowsResizeCallback] } The array containing the store and the action.
    */
   actionShowModal() {
-    return ['guiStore', ({ actionType, title, button, type, $element}) => {
+    return ['guiStore', ({ actionType, title, button, type, element }) => {
       if (actionType === 'show-modal') {
         const $modal = document.createElement('game-modal');
         title && $modal.setAttribute('title', title);
         button && $modal.setAttribute('button', button);
         type && $modal.setAttribute('type', type);
-        if ($element instanceof HTMLElement) {
-          $element.setAttribute('slot', 'content');
-          $modal.appendChild($element);
-        }
-        console.log($modal);
+        element && $modal.setAttribute('content', element);
         this.$main.appendChild($modal);
       }
     }];
@@ -86,7 +82,7 @@ export class GameCanvas extends Schema {
    * Action that receives dimensions with cumstom properties of css
    * @return { [store, windowsResizeCallback] } The array containing the store and the action.
    */
-  actionWindowResize () {
+  actionWindowResize() {
     return ['guiStore', ({ actionType, height }) => {
       if (actionType === 'window-resize') {
         this.style.setProperty('--game-canvas--height', `${height}px`);

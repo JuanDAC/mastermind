@@ -18,7 +18,7 @@ export class Hit extends Schema {
    * Defines the component HTML elements
    * @return { string } The styles of element with wrapper.
    */
-  template () {
+  template() {
     const red = this.getAttribute('red');
     const black = this.getAttribute('black');
     const white = this.getAttribute('white');
@@ -40,8 +40,8 @@ export class Hit extends Schema {
    * Defines the component styles
    * @return { string } The styles of element with wrapper.
    */
-  templateCss () {
-    const width = this.getAttribute('width');
+  templateCss() {
+    const width = Number(this.getAttribute('width'));
     return `
       <style>
         ${styles.toString()}
@@ -60,7 +60,7 @@ export class Hit extends Schema {
    * Maps the array of attributes.
    * @return { [ { Key, value } ] } The object that denied an atribute.
    */
-  mapComponentAttributes () {
+  mapComponentAttributes() {
     return [
       { key: 'black', value: 0 },
       { key: 'red', value: 0 },

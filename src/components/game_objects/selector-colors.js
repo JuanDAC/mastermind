@@ -10,14 +10,14 @@ import styles from './selector-colors.css';
 /** Libraries imports . */
 import { toPng } from 'html-to-image';
 /** Data imports . */
-import { API, COLORS } from '../../data/statics.js';
+import { COLORS } from '../../data/statics.js';
 
 /**
  * Class representing a SelectorColors.
  * @extends Schema
  */
 export class SelectorColors extends Schema {
-  constructor () {
+  constructor() {
     super();
     this.numberGeems = 4;
   }
@@ -25,62 +25,63 @@ export class SelectorColors extends Schema {
   /**
    * Logic of component after rendering
    */
-  initComponent () {
+  initComponent() {
     this.$code = this.shadowDOM.querySelector('nav[selector]');
     const { length } = COLORS;
     const { numberGeems } = this;
 
-    (async () => {
-      try {
-        const response = await fetch(`${ API }/start?rows=${ numberGeems }&mode=1&max_colors=${ length }&rounds=10&player_name=user`)
-          .then((response) => response.json());
-        const {game_id: gameId, key, use_colors} = response;
-        this.key = key;
-        this.gameId = gameId;
-        this.guiStore.dispatch({
-          actionType: 'set-colors',
-          colors: COLORS.filter((_, index) => use_colors.includes(index))
-        });
-        this.guiStore.dispatch({
-          actionType: 'number-color',
-          numberColors: numberGeems
-        });
-      } catch(error) {
-        /* mode ofline */
-        const indexes = Array(length).fill().map((_, index) => index);
+    /*     (() => { */
+    /*       try {
+    // 
+    const response = await fetch(`${ API }/start?rows=${ numberGeems }&mode=1&max_colors=${ length }&rounds=10&player_name=user`)
+      .then((response) => response.json());
+    const {game_id: gameId, key, use_colors} = response;
+    this.key = key;
+    this.gameId = gameId;
+    this.guiStore.dispatch({
+      actionType: 'set-colors',
+      colors: COLORS.filter((_, index) => use_colors.includes(index))
+    });
+    this.guiStore.dispatch({
+      actionType: 'number-color',
+      numberColors: numberGeems
+    });
+  } catch(error) { */
+    /* mode ofline */
+    const indexes = Array.from({ length: length }, (_, index) => index);
 
-        /* set array colors to use */
-        const use_colors = [];
-        Array(numberGeems).fill().forEach(() => {
-          const index = Math.floor(Math.random() * indexes.length);
-          use_colors.push(indexes.splice(index, 1).pop());
-        });
+    /* set array colors to use */
+    const use_colors = [];
+    Array(numberGeems).fill().forEach(() => {
+      const index = Math.floor(Math.random() * indexes.length);
+      use_colors.push(indexes.splice(index, 1).pop());
+    });
 
-        /* set array if code private */
-        this.__code = [];
-        Array(numberGeems).fill().forEach(() => {
-          const index = Math.floor(Math.random() * use_colors.length);
-          this.__code.push(use_colors.slice(index, index + 1).pop());
-        });
+    /* set array if code private */
+    this.__code = [];
+    Array(numberGeems).fill().forEach(() => {
+      const index = Math.floor(Math.random() * use_colors.length);
+      this.__code.push(use_colors.slice(index, index + 1).pop());
+    });
 
-        this.guiStore.dispatch({
-          actionType: 'set-colors',
-          colors: COLORS.filter((_, index) => use_colors.includes(index))
-        });
+    this.guiStore.dispatch({
+      actionType: 'set-colors',
+      colors: COLORS.filter((_, index) => use_colors.includes(index))
+    });
 
-        this.guiStore.dispatch({
-          actionType: 'number-color',
-          numberColors: numberGeems
-        });
-      }
-    })();
+    this.guiStore.dispatch({
+      actionType: 'number-color',
+      numberColors: numberGeems
+    });
+    /*     } */
+    /*   })(); */
   }
 
   /**
    * Defines the component HTML elements
    * @return { string } The styles of element with wrapper.
    */
-  template () {
+  template() {
     const gemsIterator = Array(this.numberGeems + 1).fill('');
     const gemsElements = gemsIterator.reduce((gems) => `${gems}<game-gem></game-gem>`);
     return `
@@ -94,7 +95,7 @@ export class SelectorColors extends Schema {
    * Defines the component styles
    * @return { string } The styles of element with wrapper.
    */
-  templateCss () {
+  templateCss() {
     return `
       <style>
         ${styles.toString()}
@@ -106,7 +107,7 @@ export class SelectorColors extends Schema {
    * Maps the array of attributes.
    * @return { [ { Key, value } ] } The object that denied an atribute.
    */
-  mapComponentAttributes () {
+  mapComponentAttributes() {
     return [
       { key: 'type', value: 'load' }
     ];
@@ -116,7 +117,7 @@ export class SelectorColors extends Schema {
    * Action that receives dimensions with cumstom properties of css
    * @return { [store, windowsResizeCallback] } The array containing the store and the action.
    */
-  actionWindowsResize () {
+  actionWindowsResize() {
     return ['guiStore', ({ actionType, height, width }) => {
       if (actionType === 'window-resize') {
         this.style.setProperty('--selector-colors--height', `${height}px`);
@@ -130,31 +131,18 @@ export class SelectorColors extends Schema {
    * Action that create a screeshot of element and send to actions 'image-check-code'
    * @return { [store, checkCodeCallback] } The array containing the store and the action.
    */
-  actionCheckCode () {
+  actionCheckCode() {
     return ['guiStore', ({ actionType }) => {
       if (actionType === 'check-code') {
         if (this.$code) {
-          let imageCheckCode = false;
           const { width } = this.$code.getBoundingClientRect();
           const move = [...(this.$code.children || [])].map($element => $element.getAttribute('select')).join(',');
-          const { key, gameId } = this;
           console.log(move);
           toPng(this.$code)
             .then(image => {
-              /* save screenshot in variable */
-              imageCheckCode = image;
-              /* send the fetch */
-              if (!key) {
-                throw new Error('Not key');
-              }
-              return fetch(`${ API }/check?move=${ move }&key=${ key }&game_id=${ gameId }`);
-            })
-            /* transform responce in json */
-            .then((response) => response.json())
-            /* dispatch 'image-check-code' whith data to storage */
-            .then((data) => this.guiStore.dispatch({ actionType: 'image-check-code', imageCheckCode, width, ...data }))
-            .catch(() => {
-              if (!imageCheckCode) {
+              // save screenshot in variable 
+              // send the fetch 
+              if (!image) {
                 return;
               }
               console.log('ofline');
@@ -162,7 +150,7 @@ export class SelectorColors extends Schema {
               let currentMove = move.split(',').map(character => parseInt(character));
               const currentKey = this.__code.slice();
               /* get positions and color */
-              currentMove.forEach((value, index) => {
+              currentMove.forEach((_, index) => {
                 if (currentMove[index] === currentKey[index]) {
                   currentMove[index] = currentKey[index] = 'r';
                 }
@@ -179,7 +167,7 @@ export class SelectorColors extends Schema {
                   currentMove[index] = 'n';
                 }
               });
-              
+
               /* parse data */
               const data = {
                 color_match: [0, ...currentMove].reduce((acum, value) => acum + Number(value === 'c')),
@@ -187,7 +175,7 @@ export class SelectorColors extends Schema {
                 no_match: [0, ...currentMove].reduce((acum, value) => acum + Number(value === 'n')),
               };
               /* dispatch 'image-check-code' whith data to storage */
-              this.guiStore.dispatch({ actionType: 'image-check-code', imageCheckCode, width, ...data });
+              this.guiStore.dispatch({ actionType: 'image-check-code', imageCheckCode: image, width, ...data });
             });
         }
       }
@@ -198,7 +186,7 @@ export class SelectorColors extends Schema {
    * Action that receives number of gems
    * @return { [store, windowsResizeCallback] } The array containing the store and the action.
    */
-  actionNumberGems () {
+  actionNumberGems() {
     return ['guiStore', ({ actionType, numberColors }) => {
       if (actionType === 'number-color' && this.numberGeems !== numberColors) {
         this.numberGeems = numberColors;

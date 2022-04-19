@@ -21,7 +21,7 @@ export class Room extends Schema {
   /**
    * Logic of component after rendering
    */
-  constructor () {
+  constructor() {
     super();
     this.ingameAudios = [new Audio(ingameOne), new Audio(ingameTwo)];
   }
@@ -29,39 +29,35 @@ export class Room extends Schema {
   /**
    * Logic of component after rendering
    */
-  initComponent () {
+  initComponent() {
     this.$checkeds = this.shadowDOM.querySelector('#checked');
     this.$hits = this.shadowDOM.querySelector('#hit');
 
     this.typeRoom = this.getAttribute('type');
 
     switch (this.typeRoom) {
-    case 'load':
-      break;
-    case 'home':
-      break;
-    case 'selector-avatar':
-      break;
-    case 'map':
-      break;
-    case 'game':
-      this.$hits.addEventListener('scroll', () => {
-        const { scrollLeft } = this.$hits;
-        this.$checkeds.scrollLeft = scrollLeft;
-      });
+      case 'load':
+        break;
+      case 'home':
+        break;
+      case 'selector-avatar':
+        break;
+      case 'map':
+        break;
+      case 'game':
+        this.$hits.addEventListener('scroll', () => {
+          const { scrollLeft } = this.$hits;
+          this.$checkeds.scrollLeft = scrollLeft;
+        });
 
-      this.$checkeds.addEventListener('scroll', () => {
-        const { scrollLeft } = this.$checkeds;
-        this.$hits.scrollLeft = scrollLeft;
-      });
-
-
-
-      // TODO change audio game
-      //this.ingameAudios[0].play();
-
-      break;
-    default:
+        this.$checkeds.addEventListener('scroll', () => {
+          const { scrollLeft } = this.$checkeds;
+          this.$hits.scrollLeft = scrollLeft;
+        });
+        // TODO change audio game
+        //this.ingameAudios[0].play();
+        break;
+      default:
     }
   }
 
@@ -69,8 +65,9 @@ export class Room extends Schema {
    * Action that receives image and add in elements checkeds
    * @return { [store, imageCheckCodeCallback] } The array containing the store and the action.
    */
-  actionImageCheckCode () {
-    return ['guiStore', ({ actionType, imageCheckCode, width, color_match, position_match, no_match, combination}) => {
+  actionImageCheckCode() {
+    this.step = 0;
+    return ['guiStore', ({ actionType, imageCheckCode, width, color_match, position_match, no_match }) => {
       if (actionType === 'image-check-code' && this.typeRoom === 'game') {
         const $img = document.createElement('img');
         $img.setAttribute('src', imageCheckCode);
@@ -83,23 +80,23 @@ export class Room extends Schema {
         $hit.setAttribute('white', color_match);
         $hit.setAttribute('width', width);
         this.$hits.insertAdjacentElement('afterbegin', $hit);
-        if (combination) {
-          const $element = document.createElement('img');
-          if (position_match === 4) {
-            $element.setAttribute('src', 'https://acegif.com/wp-content/gif/confetti-40.gif');
-            this.guiStore.dispatch({
-              actionType: 'show-modal',
-              title: 'You Win',
-              $element
-            });
-          } else {
-            $element.setAttribute('src', 'https://acegif.com/wp-content/gifs/sad-cat-67.gif');
-            this.guiStore.dispatch({
-              actionType: 'show-modal',
-              title: 'You lose',
-              $element
-            });
-          }
+        this.step += 1;
+        if (this.step <= 12 && position_match === 4) {
+          const element = '<img src="https://acegif.com/wp-content/gif/confetti-40.gif" slot="content" />';
+          this.guiStore.dispatch({
+            actionType: 'show-modal',
+            title: 'You Win',
+            element,
+          });
+          this.step = 0;
+        }
+        if (this.step >= 6) {
+          const element = '<img src="https://acegif.com/wp-content/gifs/sad-cat-67.gif" slot="content" />';
+          this.guiStore.dispatch({
+            actionType: 'show-modal',
+            title: 'You lose',
+            element
+          });
         }
       }
     }];
@@ -113,24 +110,24 @@ export class Room extends Schema {
     this.typeRoom = this.getAttribute('type');
 
     switch (this.typeRoom) {
-    case 'load':
-      return `
+      case 'load':
+        return `
       <div class="spinner"></div>
     `;
-    case 'home':
-      return `
+      case 'home':
+        return `
       <slot></slot>
     `;
-    case 'selector-avatar':
-      return `
+      case 'selector-avatar':
+        return `
       <slot></slot>
     `;
-    case 'map':
-      return `
+      case 'map':
+        return `
       <slot></slot>
     `;
-    case 'game':
-      return `
+      case 'game':
+        return `
       <h1>mastermind</h1>
       <game-selector-colors></game-selector-colors>
       <div class="cell interaction" id="insert" >
@@ -139,8 +136,8 @@ export class Room extends Schema {
       <div class="cell chekc" id="checked" ></div>
       <div class="cell hits" id="hit" ></div>
     `;
-    default:
-      return `
+      default:
+        return `
       <h1>Attribute ${this.typeRoom} not exist<h1>
     `;
     }
@@ -150,7 +147,7 @@ export class Room extends Schema {
    * Defines the component styles
    * @return { string } The styles of element with wrapper.
    */
-  templateCss () {
+  templateCss() {
     return `
       <style>
         ${styles.toString()}
@@ -162,7 +159,7 @@ export class Room extends Schema {
    * Maps the array of attributes.
    * @return { [ { Key, value } ] } The object that denied an atribute.
    */
-  mapComponentAttributes () {
+  mapComponentAttributes() {
     return [
       { key: 'type', value: 'load' },
       { key: 'float-botoms', value: true }
@@ -173,7 +170,7 @@ export class Room extends Schema {
    * Action that receives dimensions with cumstom properties of css
    * @return { [store, windowsResizeCallback] } The array containing the store and the action.
    */
-  actionWindowsResize () {
+  actionWindowsResize() {
     return ['guiStore', ({ actionType, height, width }) => {
       if (actionType === 'window-resize') {
         this.style.setProperty('--room--height', `${height}px`);
