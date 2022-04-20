@@ -34,7 +34,7 @@ This project devides in back and front, back is interpreted/tested on Ubuntu 14.
 * [audio](/assets/audio) - Audios for the different components of the program.
 
 ## How to play
-1) To play you need to access to the webpage: http://34.75.178.179/mastermind/
+1) To play you need to access to the webpage: [https://625f46580d896f0253f8f2ad--silver-pie-1a082b.netlify.app/](https://625f46580d896f0253f8f2ad--silver-pie-1a082b.netlify.app/)
    This is how initially would look the interface:
    ![initial_interface](readme_images/initial_page.png)
 2) Then you can hover over the circles and select the colors:
